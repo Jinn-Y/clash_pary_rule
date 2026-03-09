@@ -1,4 +1,63 @@
-// DNS 配置 (源自 clash-yaml.yaml)
+const rules = [
+  "RULE-SET,talkatone,🇺🇸 美国",
+  // ******** 工作规则 ********************* //
+  "DOMAIN-SUFFIX,jinnll.xyz,🇺🇸 美国",
+  "DOMAIN-SUFFIX,weajp.com,🏢 工作直连",
+  "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
+  "RULE-SET,amazon,🏢 工作直连",
+  "RULE-SET,aws,🏢 工作直连",
+  "DOMAIN-KEYWORD,starpay,🏢 工作直连",
+  "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
+  "DOMAIN-KEYWORD,atlassian,🏢 工作直连",
+  // ******** 工作规则 ********************* //
+  "RULE-SET,category-ads-all,🛑 广告拦截",
+  "RULE-SET,category-ai-!cn,💬 AI 服务",
+  "RULE-SET,bilibili,📺 哔哩哔哩",
+  "RULE-SET,youtube,📹 油管视频",
+  "RULE-SET,google,🔍 谷歌服务",
+  "RULE-SET,geolocation-cn,🔒 国内服务",
+  "RULE-SET,cn,🔒 国内服务",
+  "RULE-SET,github,🐱 Github",
+  "RULE-SET,gitlab,🐱 Github",
+  "RULE-SET,microsoft,Ⓜ️ 微软服务",
+  "RULE-SET,apple,🍏 苹果服务",
+  "RULE-SET,facebook,🌐 社交媒体",
+  "RULE-SET,instagram,🌐 社交媒体",
+  "RULE-SET,twitter,🌐 社交媒体",
+  "RULE-SET,tiktok,🌐 社交媒体",
+  "RULE-SET,linkedin,🌐 社交媒体",
+  "RULE-SET,netflix,🎬 流媒体",
+  "RULE-SET,hulu,🎬 流媒体",
+  "RULE-SET,disney,🎬 流媒体",
+  "RULE-SET,hbo,🎬 流媒体",
+  "RULE-SET,bahamut,🎬 流媒体",
+  "RULE-SET,steam,🎮 游戏平台",
+  "RULE-SET,epicgames,🎮 游戏平台",
+  "RULE-SET,ea,🎮 游戏平台",
+  "RULE-SET,ubisoft,🎮 游戏平台",
+  "RULE-SET,blizzard,🎮 游戏平台",
+  "RULE-SET,coursera,📚 教育资源",
+  "RULE-SET,edx,📚 教育资源",
+  "RULE-SET,udemy,📚 教育资源",
+  "RULE-SET,khanacademy,📚 教育资源",
+  "RULE-SET,category-scholar-!cn,📚 教育资源",
+  "RULE-SET,paypal,💰 金融服务",
+  "RULE-SET,visa,💰 金融服务",
+  "RULE-SET,mastercard,💰 金融服务",
+  "RULE-SET,stripe,💰 金融服务",
+  "RULE-SET,wise,💰 金融服务",
+  "RULE-SET,azure,☁️ 云服务",
+  "RULE-SET,digitalocean,☁️ 云服务",
+  "RULE-SET,heroku,☁️ 云服务",
+  "RULE-SET,dropbox,☁️ 云服务",
+  "RULE-SET,geolocation-!cn,🌐 非中国",
+  "RULE-SET,google,🔍 谷歌服务,no-resolve",
+  "RULE-SET,private,🏠 私有网络,no-resolve",
+  "RULE-SET,cn,🔒 国内服务,no-resolve",
+  "RULE-SET,telegram,📲 电报消息,no-resolve",
+  "MATCH,🐟 漏网之鱼"
+];
+
 const dnsConfig = {
   "enable": true,
   "ipv6": true,
@@ -92,135 +151,66 @@ const ruleProviders = {
   "geolocation-!cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/geolocation-!cn.mrs", "path": "./ruleset/geolocation-!cn.mrs" },
   "private": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/private.mrs", "path": "./ruleset/private.mrs" },
   "telegram": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs", "path": "./ruleset/telegram.mrs" },
+  "talkatone": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/talkatone.mrs", "path": "./ruleset/talkatone.mrs" },
 };
 
-// 规则 (源自 clash-yaml.yaml)
-const rules = [
-  // ******** 自定义规则 ********************* //
-  "DOMAIN-SUFFIX,rustdesk.251123.xyz,🚀 节点选择",
-  "DOMAIN-SUFFIX,linux.do,🇯🇵 日本",
-  // ******** 自定义规则 END ********************* //
-  // ******** 工作规则 ********************* //
-  "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
-  "RULE-SET,amazon,🏢 工作直连",
-  "RULE-SET,aws,🏢 工作直连",
-  "DOMAIN-KEYWORD,starpay,🏢 工作直连",
-  "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
-  "DOMAIN-KEYWORD,atlassian,🏢 工作直连",
-   // ******** 工作规则 END ********************* //
-  "RULE-SET,category-ads-all,🛑 广告拦截",
-  "RULE-SET,category-ai-!cn,💬 AI 服务",
-  "RULE-SET,bilibili,📺 哔哩哔哩",
-  "RULE-SET,youtube,📹 油管视频",
-  "RULE-SET,google,🔍 谷歌服务",
-  "RULE-SET,geolocation-cn,🔒 国内服务",
-  "RULE-SET,cn,🔒 国内服务",
-  "RULE-SET,github,🐱 Github",
-  "RULE-SET,gitlab,🐱 Github",
-  "RULE-SET,microsoft,Ⓜ️ 微软服务",
-  "RULE-SET,apple,🍏 苹果服务",
-  "RULE-SET,facebook,🌐 社交媒体",
-  "RULE-SET,instagram,🌐 社交媒体",
-  "RULE-SET,twitter,🌐 社交媒体",
-  "RULE-SET,tiktok,🌐 社交媒体",
-  "RULE-SET,linkedin,🌐 社交媒体",
-  "RULE-SET,netflix,🎬 流媒体",
-  "RULE-SET,hulu,🎬 流媒体",
-  "RULE-SET,disney,🎬 流媒体",
-  "RULE-SET,hbo,🎬 流媒体",
-  "RULE-SET,bahamut,🎬 流媒体",
-  "RULE-SET,steam,🎮 游戏平台",
-  "RULE-SET,epicgames,🎮 游戏平台",
-  "RULE-SET,ea,🎮 游戏平台",
-  "RULE-SET,ubisoft,🎮 游戏平台",
-  "RULE-SET,blizzard,🎮 游戏平台",
-  "RULE-SET,coursera,📚 教育资源",
-  "RULE-SET,edx,📚 教育资源",
-  "RULE-SET,udemy,📚 教育资源",
-  "RULE-SET,khanacademy,📚 教育资源",
-  "RULE-SET,category-scholar-!cn,📚 教育资源",
-  "RULE-SET,paypal,💰 金融服务",
-  "RULE-SET,visa,💰 金融服务",
-  "RULE-SET,mastercard,💰 金融服务",
-  "RULE-SET,stripe,💰 金融服务",
-  "RULE-SET,wise,💰 金融服务",
-  "RULE-SET,azure,☁️ 云服务",
-  "RULE-SET,digitalocean,☁️ 云服务",
-  "RULE-SET,heroku,☁️ 云服务",
-  "RULE-SET,dropbox,☁️ 云服务",
-  "RULE-SET,geolocation-!cn,🌐 非中国",
-  "RULE-SET,google,🔍 谷歌服务,no-resolve",
-  "RULE-SET,private,🏠 私有网络,no-resolve",
-  "RULE-SET,cn,🔒 国内服务,no-resolve",
-  "RULE-SET,telegram,📲 电报消息,no-resolve",
-  "MATCH,🐟 漏网之鱼"
-];
-
-// 代理组 (源自 clash-yaml.yaml, 已简化并添加地区分组)
 
 // 地区关键词映射表 (参考 clash-js.js)
 const regionKeywords = {
-  "🇭🇰 香港": { keywords: ["港", "HK", "Hong Kong"] },
-  "🇹🇼 台湾": { keywords: ["台", "TW", "Taiwan"] },
-  "🇯🇵 日本": { keywords: ["日", "JP", "Japan", "大阪"] },
-  "🇺🇸 美国": { keywords: ["美", "US", "United States", "硅谷"] },
-  "🇸🇬 新加坡": { keywords: ["新", "SG", "Singapore", "sgp"] },
-  "🇰🇷 韩国": { keywords: ["韩", "KR", "Korea", "首尔"] },
+  "🇭🇰 香港": { keywords: ["港", "HK", "Hong Kong", "HKG"] },
+  "🇹🇼 台湾": { keywords: ["台", "TW", "Taiwan", "Taipei"] },
+  "🇯🇵 日本": { keywords: ["日", "JP", "Japan", "Tokyo", "Osaka", "Saitama"] },
+  "🇺🇸 美国": { keywords: ["美", "US", "United States", "America", "Los Angeles", "San Francisco", "Silicon Valley"] },
+  "🇸🇬 新加坡": { keywords: ["新", "SG", "Singapore", "SGP"] },
+  "🇰🇷 韩国": { keywords: ["韩", "KR", "Korea", "Seoul"] },
+  "🇬🇧 英国": { keywords: ["英", "UK", "United Kingdom", "London", "Britain", "England"] },
+  "🇩🇪 德国": { keywords: ["德", "DE", "Germany", "Frankfurt"] },
+  "🇫🇷 法国": { keywords: ["法", "FR", "France", "Paris"] },
+  "🇨🇦 加拿大": { keywords: ["加", "CA", "Canada", "Montreal", "Toronto", "Vancouver"] },
+  "🇦🇺 澳大利亚": { keywords: ["澳", "AU", "Australia", "Sydney"] },
+  "🇮🇳 印度": { keywords: ["印", "IN", "India", "Mumbai"] },
+  "🇷🇺 俄罗斯": { keywords: ["俄", "RU", "Russia", "Moscow"] },
+  "🇳🇱 荷兰": { keywords: ["荷", "NL", "Netherlands", "Amsterdam"] },
+  "🇹🇷 土耳其": { keywords: ["土", "TR", "Turkey", "Istanbul"] },
+  "🇦🇷 阿根廷": { keywords: ["阿", "AR", "Argentina"] },
+  "🇵🇭 菲律宾": { keywords: ["菲", "PH", "Philippines"] },
+  "🇲🇾 马来西亚": { keywords: ["马", "MY", "Malaysia"] },
+  "🇹🇭 泰国": { keywords: ["泰", "TH", "Thailand"] },
+  "🇻🇳 越南": { keywords: ["越", "VN", "Vietnam"] }
 };
 
-// 生成地区分组
-const regionGroupNames = Object.keys(regionKeywords);
-const regionGroups = Object.entries(regionKeywords).map(([name, { keywords }]) => ({
-    name,
-    type: "select",
-    "include-all": true,
-    filter: keywords.join("|"),
-}));
-
-// 为其他策略组提供的可选代理/策略组
-const ruleGroupProxies = ['🚀 节点选择', 'DIRECT', 'REJECT', '⚡ 自动选择', ...regionGroupNames];
+// 地区分组生成逻辑已移入 main 函数以支持动态过滤
 
 const ruleGroupNames = [
-    '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
-    '🔒 国内服务', '📲 电报消息', '🐱 Github', 'Ⓜ️ 微软服务', '🍏 苹果服务',
-    '🌐 社交媒体', '🎬 流媒体', '🎮 游戏平台', '📚 教育资源', '💰 金融服务',
-    '☁️ 云服务', '🌐 非中国', '🐟 漏网之鱼'
+  '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
+  '🔒 国内服务', '📲 电报消息', '🐱 Github', 'Ⓜ️ 微软服务', '🍏 苹果服务',
+  '🌐 社交媒体', '🎬 流媒体', '🎮 游戏平台', '📚 教育资源', '💰 金融服务',
+  '☁️ 云服务', '🌐 非中国', '🐟 漏网之鱼'
 ];
 
-const otherRuleGroups = ruleGroupNames.map(name => ({
-  "type": 'select',
-  "name": name,
-  "proxies": ruleGroupProxies
-}));
+// 为每个规则组定义默认节点
+const ruleGroupDefaults = {
+  '💬 AI 服务': '🇺🇸 美国',      // AI 服务使用自动选择
+  '📺 哔哩哔哩': 'DIRECT',          // 哔哩哔哩直连
+  '📹 油管视频': '🇭🇰 香港',        // 油管使用香港节点
+  '🔍 谷歌服务': '🇺🇸 美国',      // 谷歌服务使用自动选择
+  '🏠 私有网络': 'DIRECT',          // 私有网络直连
+  '🔒 国内服务': 'DIRECT',          // 国内服务直连
+  '📲 电报消息': '🚀 节点选择',      // 电报使用自动选择
+  '🐱 Github': '🚀 节点选择',        // Github 使用自动选择
+  'Ⓜ️ 微软服务': '⚡ 自动选择',     // 微软服务使用自动选择
+  '🍏 苹果服务': 'DIRECT',          // 苹果服务直连
+  '🌐 社交媒体': '🚀 节点选择',      // 社交媒体使用自动选择
+  '🎬 流媒体': '🚀 节点选择',          // 流媒体使用香港节点
+  '🎮 游戏平台': '🚀 节点选择',        // 游戏平台使用日本节点
+  '📚 教育资源': '⚡ 自动选择',      // 教育资源使用自动选择
+  '💰 金融服务': '🇺🇸 美国',        // 金融服务使用美国节点
+  '☁️ 云服务': '🇺🇸 美国',        // 云服务使用自动选择
+  '🌐 非中国': '🚀 节点选择',        // 非中国地区使用自动选择
+  '🐟 漏网之鱼': '🚀 节点选择'       // 漏网之鱼使用节点选择
+};
 
-const proxyGroups = [
-  {
-    "type": "select",
-    "name": "🚀 节点选择",
-    "proxies": [ "DIRECT", "REJECT", "⚡ 自动选择"],
-    "include-all": true // 自动包含所有代理节点
-  },
-  {
-    "name": "⚡ 自动选择",
-    "type": "url-test",
-    "url": "https://www.gstatic.com/generate_204",
-    "interval": 300,
-    "lazy": false,
-    "include-all": true // 自动包含所有代理节点
-  },
-  ...regionGroups, // 添加地区分组实体
-  {
-    "type": "select",
-    "name": "🛑 广告拦截",
-    "proxies": [ "REJECT", "DIRECT" ]
-  },
-  {
-    "type": "select",
-    "name": "🏢 工作直连",
-    "proxies": [ "DIRECT" ]
-  },
-  ...otherRuleGroups
-];
+// 策略组生成逻辑已移入 main 函数
 
 // 程序入口
 function main(config) {
@@ -231,46 +221,171 @@ function main(config) {
     throw new Error("配置文件中未找到任何代理");
   }
 
-  // --- 自定义链式代理生成 ---
-  const originalProxyNames = (config.proxies || []).map(p => p.name);
+  // --- 动态生成节点组 ---
+  const allProxies = config.proxies || [];
 
-  // 1. 创建入口和出口选择组
-  const entryGroup = {
-      name: '⛓️ 入口节点',
-      type: 'select',
-      proxies: originalProxyNames,
-  };
+  // 1. 过滤存在的地区
+  const validRegionGroups = [];
+  const validRegionNames = [];
+  for (const [name, { keywords }] of Object.entries(regionKeywords)) {
+    // 检查是否有节点匹配该地区的关键字
+    const regex = new RegExp(keywords.join("|"));
+    if (allProxies.some(p => regex.test(p.name))) {
+      const regionGroup = {
+        name,
+        type: "select",
+        "include-all": true,
+        filter: keywords.join("|"),
+      };
 
-  const exitGroup = {
-      name: '⛓️ 出口节点',
-      type: 'select',
-      proxies: [...originalProxyNames, 'DIRECT'],
-  };
+      // 为美国节点组设置默认节点(优先选择VMISS)
+      if (name === "🇺🇸 美国") {
+        const vmissNode = allProxies.find(p =>
+          regex.test(p.name) && p.name.includes("VMISS")
+        );
+        if (vmissNode) {
+          regionGroup.default = vmissNode.name;
+        }
+      }
 
-  // 2. 创建一个 'relay' 代理组，它本身就是一个可用的代理
-  const relayChainGroup = {
-      name: '⛓️ 自定义链式代理',
-      type: 'relay',
-      proxies: ['⛓️ 入口节点', '⛓️ 出口节点'],
-  };
-
-  // 3. 将新创建的组添加到总的代理组列表中
-  const finalProxyGroups = [...proxyGroups, entryGroup, exitGroup, relayChainGroup];
-
-  // 4. 将新的 "自定义链式代理" 添加到主选择器中，使其可以被规则使用
-  const mainSelector = finalProxyGroups.find(g => g.name === '🚀 节点选择');
-  if (mainSelector) {
-      // 插入到 '⚡ 自动选择' 之后
-      mainSelector.proxies.splice(3, 0, '⛓️ 自定义链式代理');
+      validRegionGroups.push(regionGroup);
+      validRegionNames.push(name);
+    }
   }
 
-  // 5. 将 "自定义链式代理" 添加到其他所有策略组中，方便直接选用
-  finalProxyGroups.forEach(group => {
-      if (ruleGroupNames.includes(group.name) && !group.proxies.includes('⛓️ 自定义链式代理')) {
-          group.proxies.splice(4, 0, '⛓️ 自定义链式代理');
-      }
+  // 2. 生成 ruleGroupProxies (动态)
+  const dynamicRuleGroupProxies = ['🚀 节点选择', 'DIRECT', 'REJECT', '⚡ 自动选择', ...validRegionNames];
+
+  // 3. 生成 otherRuleGroups (动态)
+  const dynamicOtherRuleGroups = ruleGroupNames.map(name => {
+    let defaultProxy = ruleGroupDefaults[name] || '🚀 节点选择';
+    // 如果默认节点是地区组，且该地区组不存在，则降级为 '🚀 节点选择'
+    if (regionKeywords[defaultProxy] && !validRegionNames.includes(defaultProxy)) {
+      defaultProxy = '🚀 节点选择';
+    }
+    const proxies = [defaultProxy, ...dynamicRuleGroupProxies.filter(p => p !== defaultProxy)];
+
+    return {
+      "type": 'select',
+      "name": name,
+      "proxies": proxies
+    };
   });
-  // --- 结束自定义链式代理生成 ---
+
+  // 4. 组装基础 proxyGroups
+  const baseProxyGroups = [
+    {
+      "type": "select",
+      "name": "🚀 节点选择",
+      "proxies": ["DIRECT", "REJECT", "⚡ 自动选择"],
+      "include-all": true // 自动包含所有代理节点
+    },
+    {
+      "name": "⚡ 自动选择",
+      "type": "url-test",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": 300,
+      "lazy": false,
+      "include-all": true // 自动包含所有代理节点
+    },
+    ...validRegionGroups, // 添加有效的地区分组实体
+    {
+      "type": "select",
+      "name": "🛑 广告拦截",
+      "proxies": ["REJECT", "DIRECT"]
+    },
+    {
+      "type": "select",
+      "name": "🏢 工作直连",
+      "proxies": ["DIRECT"]
+    },
+    ...dynamicOtherRuleGroups
+  ];
+
+  // --- 基于 dialer-proxy 的二级链式代理生成 ---
+  const originalProxies = allProxies;
+
+  // 1. 为每个原始节点创建两个链式副本
+  // L1: 第一级(入口)节点
+  // L2: 第二级(出口)节点,通过L1中转
+
+  const level1Proxies = [];  // 第一级(入口)
+  const level2Proxies = [];  // 第二级(出口)
+
+  originalProxies.forEach(proxy => {
+    // L1: 第一级节点,不设置 dialer-proxy
+    const l1Proxy = { ...proxy };
+    l1Proxy.name = `${proxy.name} ↗️`;
+    level1Proxies.push(l1Proxy);
+
+    // L2: 出口节点,直接通过第一级中转 (L1 → L2)
+    const l2Proxy = { ...proxy };
+    l2Proxy.name = `${proxy.name} ↘️`;
+    l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
+    level2Proxies.push(l2Proxy);
+  });
+
+  // 将所有链式节点添加到配置中
+  config.proxies = [...originalProxies, ...level1Proxies, ...level2Proxies];
+
+  // 2. 为所有使用 include-all 的基础代理组添加 filter,排除链式节点
+  const excludeChainFilter = '^(?!.*(↗️|↘️)).*$';
+  baseProxyGroups.forEach(group => {
+    if (group['include-all'] && !group.filter) {
+      // 如果已有 include-all 但没有 filter,添加排除链式节点的 filter
+      group.filter = excludeChainFilter;
+    } else if (group['include-all'] && group.filter) {
+      // 如果已有 filter,需要同时满足原 filter 和排除链式节点
+      const originalFilter = group.filter;
+      group.filter = `^(?=.*(?:${originalFilter}))(?!.*(↗️|↘️)).*$`;
+    }
+  });
+
+  // 3. 创建入口节点选择组
+  const chainLevel1Group = {
+    name: '⛓️ 入口节点',
+    type: 'select',
+    'include-all': true,
+    filter: '↗️', // 只包含入口节点
+  };
+
+  // 4. 创建出口节点选择组
+  const chainExitGroup = {
+    name: '⛓️ 出口节点',
+    type: 'select',
+    'include-all': true,
+    filter: '↘️', // 只包含出口节点
+  };
+
+  // 5. 创建链式代理组(指向出口节点)
+  const chainGroup = {
+    name: '⛓️ 链式代理',
+    type: 'select',
+    proxies: ['⛓️ 出口节点'],
+  };
+
+  // 6. 组装最终的代理组列表
+  const finalProxyGroups = [
+    ...baseProxyGroups,
+    chainGroup,          // 链式代理
+    chainLevel1Group,    // 入口节点选择
+    chainExitGroup,      // 出口节点选择
+  ];
+
+  // 7. 将"链式代理"添加到主选择器中
+  const mainSelector = finalProxyGroups.find(g => g.name === '🚀 节点选择');
+  if (mainSelector) {
+    // 插入到 '⚡ 自动选择' 之后
+    mainSelector.proxies.splice(3, 0, '⛓️ 链式代理');
+  }
+
+  // 8. 将"链式代理"添加到其他所有策略组中
+  finalProxyGroups.forEach(group => {
+    if (ruleGroupNames.includes(group.name) && !group.proxies.includes('⛓️ 链式代理')) {
+      group.proxies.splice(4, 0, '⛓️ 链式代理');
+    }
+  });
+  // --- 结束二级链式代理生成 ---
 
   // 覆盖 DNS 配置
   config.dns = dnsConfig;
