@@ -16,6 +16,7 @@ const rules = [
   "DOMAIN,open.e.189.cn,DIRECT",
   // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
   // ******** 工作规则 ********************* //
+  "DOMAIN-SUFFIX,jinnll.xyz,☁️ 云服务",
   "DOMAIN-SUFFIX,weajp.com,🏢 工作直连",
   "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
   "RULE-SET,amazon,🏢 工作直连",
