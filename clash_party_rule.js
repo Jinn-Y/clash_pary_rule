@@ -1,6 +1,21 @@
 const rules = [
+  // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
+  "DOMAIN,msmp.abchina.com.cn,REJECT",
+  "DOMAIN,www.baidu.com,DIRECT",
+  "DOMAIN,yunbusiness.ccb.com,DIRECT",
+  "DOMAIN,wxh.wo.cn,DIRECT",
+  "DOMAIN,gate.lagou.com,DIRECT",
+  "DOMAIN,www.abchina.com.cn,DIRECT",
+  "DOMAIN,www.shanbay.com,DIRECT",
+  "DOMAIN,login-service.mobile-bank.psbc.com,DIRECT",
+  "DOMAIN,mobile-bank.psbc.com,DIRECT",
+  "DOMAIN,id6.me,DIRECT",
+  "DOMAIN,www.163.com,DIRECT",
+  "DOMAIN,easy-login.10099.com.cn,DIRECT",
+  "DOMAIN-KEYWORD,-update.xoyocdn.com,DIRECT",
+  "DOMAIN,open.e.189.cn,DIRECT",
+  // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
   // ******** 工作规则 ********************* //
-  "DOMAIN-SUFFIX,jinnll.xyz,🇺🇸 美国",
   "DOMAIN-SUFFIX,weajp.com,🏢 工作直连",
   "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
   "RULE-SET,amazon,🏢 工作直连",
