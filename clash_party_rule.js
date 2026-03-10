@@ -26,6 +26,7 @@ const rules = [
   // ******** 工作规则 ********************* //
   "RULE-SET,category-bank-cn,DIRECT",
   "RULE-SET,talkatone,🇺🇸 美国",
+  "RULE-SET,whatsapp,🇺🇸 美国",
   "RULE-SET,category-ads-all,🛑 广告拦截",
   "RULE-SET,category-ai-!cn,💬 AI 服务",
   "RULE-SET,bilibili,📺 哔哩哔哩",
@@ -168,6 +169,7 @@ const ruleProviders = {
   "private": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/private.mrs", "path": "./ruleset/private.mrs" },
   "telegram": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs", "path": "./ruleset/telegram.mrs" },
   "talkatone": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/talkatone.mrs", "path": "./ruleset/talkatone.mrs" },
+  "whatsapp": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/whatsapp.mrs", "path": "./ruleset/whatsapp.mrs" },
   "category-bank-cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-bank-cn.mrs", "path": "./ruleset/category-bank-cn.mrs" },
 };
 
