@@ -243,34 +243,56 @@ function main(config) {
 
   // --- 动态生成节点组 ---
   const allProxies = config.proxies || [];
+  const hasStaticProxies = allProxies.length > 0;
+  const hasProxyProviders = proxyProviderCount > 0;
 
   // 1. 过滤存在的地区
   const validRegionGroups = [];
   const validRegionNames = [];
+
+  function createRegionGroup(name, keywords, defaultName) {
+    const regionGroup = {
+      name,
+      type: "select",
+      "include-all": true,
+      filter: keywords.join("|"),
+    };
+
+    if (defaultName) {
+      regionGroup.default = defaultName;
+    }
+
+    return regionGroup;
+  }
+
   for (const [name, { keywords }] of Object.entries(regionKeywords)) {
+    // 仅使用 proxy-providers 时，无法提前枚举节点名；此时保留地区分组，由 include-all + filter 动态匹配。
+    if (!hasStaticProxies && hasProxyProviders) {
+      validRegionGroups.push(createRegionGroup(name, keywords));
+      validRegionNames.push(name);
+      continue;
+    }
+
     // 检查是否有节点匹配该地区的关键字
     const regex = new RegExp(keywords.join("|"));
-    if (allProxies.some(p => regex.test(p.name))) {
-      const regionGroup = {
-        name,
-        type: "select",
-        "include-all": true,
-        filter: keywords.join("|"),
-      };
-
-      // 为美国节点组设置默认节点(优先选择VMISS)
-      if (name === "🇺🇸 美国") {
-        const vmissNode = allProxies.find(p =>
-          regex.test(p.name) && p.name.includes("VMISS")
-        );
-        if (vmissNode) {
-          regionGroup.default = vmissNode.name;
-        }
-      }
-
-      validRegionGroups.push(regionGroup);
-      validRegionNames.push(name);
+    if (!allProxies.some(p => regex.test(p.name))) {
+      continue;
     }
+
+    let defaultName;
+
+    // 为美国节点组设置默认节点(优先选择VMISS)
+    if (name === "🇺🇸 美国") {
+      const vmissNode = allProxies.find(p =>
+        regex.test(p.name) && p.name.includes("VMISS")
+      );
+      if (vmissNode) {
+        defaultName = vmissNode.name;
+      }
+    }
+
+    validRegionGroups.push(createRegionGroup(name, keywords, defaultName));
+    validRegionNames.push(name);
   }
 
   // 2. 生成 ruleGroupProxies (动态)
@@ -324,29 +346,32 @@ function main(config) {
 
   // --- 基于 dialer-proxy 的二级链式代理生成 ---
   const originalProxies = allProxies;
+  const canBuildChainProxy = hasStaticProxies;
 
-  // 1. 为每个原始节点创建两个链式副本
-  // L1: 第一级(入口)节点
-  // L2: 第二级(出口)节点,通过L1中转
+  if (canBuildChainProxy) {
+    // 1. 为每个原始节点创建两个链式副本
+    // L1: 第一级(入口)节点
+    // L2: 第二级(出口)节点,通过L1中转
 
-  const level1Proxies = [];  // 第一级(入口)
-  const level2Proxies = [];  // 第二级(出口)
+    const level1Proxies = [];  // 第一级(入口)
+    const level2Proxies = [];  // 第二级(出口)
 
-  originalProxies.forEach(proxy => {
-    // L1: 第一级节点,不设置 dialer-proxy
-    const l1Proxy = { ...proxy };
-    l1Proxy.name = `${proxy.name} ↗️`;
-    level1Proxies.push(l1Proxy);
+    originalProxies.forEach(proxy => {
+      // L1: 第一级节点,不设置 dialer-proxy
+      const l1Proxy = { ...proxy };
+      l1Proxy.name = `${proxy.name} ↗️`;
+      level1Proxies.push(l1Proxy);
 
-    // L2: 出口节点,直接通过第一级中转 (L1 → L2)
-    const l2Proxy = { ...proxy };
-    l2Proxy.name = `${proxy.name} ↘️`;
-    l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
-    level2Proxies.push(l2Proxy);
-  });
+      // L2: 出口节点,直接通过第一级中转 (L1 → L2)
+      const l2Proxy = { ...proxy };
+      l2Proxy.name = `${proxy.name} ↘️`;
+      l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
+      level2Proxies.push(l2Proxy);
+    });
 
-  // 将所有链式节点添加到配置中
-  config.proxies = [...originalProxies, ...level1Proxies, ...level2Proxies];
+    // 将所有链式节点添加到配置中
+    config.proxies = [...originalProxies, ...level1Proxies, ...level2Proxies];
+  }
 
   // 2. 为所有使用 include-all 的基础代理组添加 filter,排除链式节点
   const excludeChainFilter = '^(?!.*(↗️|↘️)).*$';
@@ -361,46 +386,52 @@ function main(config) {
     }
   });
 
-  // 3. 创建入口节点选择组
-  const chainLevel1Group = {
-    name: '⛓️ 入口节点',
-    type: 'select',
-    'include-all': true,
-    filter: '↗️', // 只包含入口节点
-  };
+  // 3. 组装最终的代理组列表
+  const finalProxyGroups = [...baseProxyGroups];
 
-  // 4. 创建出口节点选择组
-  const chainExitGroup = {
-    name: '⛓️ 出口节点',
-    type: 'select',
-    'include-all': true,
-    filter: '↘️', // 只包含出口节点
-  };
+  if (canBuildChainProxy) {
+    // 4. 创建入口节点选择组
+    const chainLevel1Group = {
+      name: '⛓️ 入口节点',
+      type: 'select',
+      'include-all': true,
+      filter: '↗️', // 只包含入口节点
+    };
 
-  // 5. 创建链式代理组(指向出口节点)
-  const chainGroup = {
-    name: '⛓️ 链式代理',
-    type: 'select',
-    proxies: ['⛓️ 出口节点'],
-  };
+    // 5. 创建出口节点选择组
+    const chainExitGroup = {
+      name: '⛓️ 出口节点',
+      type: 'select',
+      'include-all': true,
+      filter: '↘️', // 只包含出口节点
+    };
 
-  // 6. 组装最终的代理组列表
-  const finalProxyGroups = [
-    ...baseProxyGroups,
-    chainGroup,          // 链式代理
-    chainLevel1Group,    // 入口节点选择
-    chainExitGroup,      // 出口节点选择
-  ];
+    // 6. 创建链式代理组(指向出口节点)
+    const chainGroup = {
+      name: '⛓️ 链式代理',
+      type: 'select',
+      proxies: ['⛓️ 出口节点'],
+    };
+
+    finalProxyGroups.push(
+      chainGroup,          // 链式代理
+      chainLevel1Group,    // 入口节点选择
+      chainExitGroup,      // 出口节点选择
+    );
+  }
 
   // 7. 将"链式代理"添加到主选择器中
   const mainSelector = finalProxyGroups.find(g => g.name === '🚀 节点选择');
-  if (mainSelector) {
+  if (canBuildChainProxy && mainSelector) {
     // 插入到 '⚡ 自动选择' 之后
     mainSelector.proxies.splice(3, 0, '⛓️ 链式代理');
   }
 
   // 8. 将"链式代理"添加到其他所有策略组中
   finalProxyGroups.forEach(group => {
+    if (!canBuildChainProxy) {
+      return;
+    }
     if (ruleGroupNames.includes(group.name) && !group.proxies.includes('⛓️ 链式代理')) {
       group.proxies.splice(4, 0, '⛓️ 链式代理');
     }
