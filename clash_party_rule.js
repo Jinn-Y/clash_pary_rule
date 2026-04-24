@@ -344,37 +344,28 @@ function main(config) {
     ...dynamicOtherRuleGroups
   ];
 
-  // --- 基于 dialer-proxy 的二级链式代理生成 ---
+  // --- 基于 dialer-proxy 的精简版链式代理生成 ---
   const originalProxies = allProxies;
   const canBuildChainProxy = hasStaticProxies;
 
   if (canBuildChainProxy) {
-    // 1. 为每个原始节点创建两个链式副本
-    // L1: 第一级(入口)节点
-    // L2: 第二级(出口)节点,通过L1中转
-
-    const level1Proxies = [];  // 第一级(入口)
-    const level2Proxies = [];  // 第二级(出口)
+    // 1. 仅为出口节点创建带有拨号代理的克隆 (入口直接复用原节点)
+    const level2Proxies = [];  // 出口节点
 
     originalProxies.forEach(proxy => {
-      // L1: 第一级节点,不设置 dialer-proxy
-      const l1Proxy = { ...proxy };
-      l1Proxy.name = `${proxy.name} ↗️`;
-      level1Proxies.push(l1Proxy);
-
-      // L2: 出口节点,直接通过第一级中转 (L1 → L2)
+      // 出口节点,通过 ⛓️ 入口节点 中转
       const l2Proxy = { ...proxy };
       l2Proxy.name = `${proxy.name} ↘️`;
       l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
       level2Proxies.push(l2Proxy);
     });
 
-    // 将所有链式节点添加到配置中
-    config.proxies = [...originalProxies, ...level1Proxies, ...level2Proxies];
+    // 将链式出口节点添加到配置中 (不再添加 ↗️ 入口节点)
+    config.proxies = [...originalProxies, ...level2Proxies];
   }
 
   // 2. 为所有使用 include-all 的基础代理组添加 filter,排除链式节点
-  const excludeChainFilter = '^(?!.*(↗️|↘️)).*$';
+  const excludeChainFilter = '^(?!.*(↘️)).*$';
   baseProxyGroups.forEach(group => {
     if (group['include-all'] && !group.filter) {
       // 如果已有 include-all 但没有 filter,添加排除链式节点的 filter
@@ -382,7 +373,7 @@ function main(config) {
     } else if (group['include-all'] && group.filter) {
       // 如果已有 filter,需要同时满足原 filter 和排除链式节点
       const originalFilter = group.filter;
-      group.filter = `^(?=.*(?:${originalFilter}))(?!.*(↗️|↘️)).*$`;
+      group.filter = `^(?=.*(?:${originalFilter}))(?!.*(↘️)).*$`;
     }
   });
 
@@ -390,33 +381,25 @@ function main(config) {
   const finalProxyGroups = [...baseProxyGroups];
 
   if (canBuildChainProxy) {
-    // 4. 创建入口节点选择组
+    // 4. 创建入口节点选择组 (自动吸纳所有不带 ↘️ 的普通节点)
     const chainLevel1Group = {
       name: '⛓️ 入口节点',
       type: 'select',
       'include-all': true,
-      filter: '↗️', // 只包含入口节点
+      filter: excludeChainFilter, // 只包含常规节点
     };
 
-    // 5. 创建出口节点选择组
-    const chainExitGroup = {
-      name: '⛓️ 出口节点',
-      type: 'select',
-      'include-all': true,
-      filter: '↘️', // 只包含出口节点
-    };
-
-    // 6. 创建链式代理组(指向出口节点)
+    // 5. 创建链式代理组 (自动吸纳所有带 ↘️ 的出口节点)
     const chainGroup = {
       name: '⛓️ 链式代理',
       type: 'select',
-      proxies: ['⛓️ 出口节点'],
+      'include-all': true,
+      filter: '↘️', // 只包含出口落地节点
     };
 
     finalProxyGroups.push(
-      chainGroup,          // 链式代理
       chainLevel1Group,    // 入口节点选择
-      chainExitGroup,      // 出口节点选择
+      chainGroup,          // 链式代理落地选择
     );
   }
 
