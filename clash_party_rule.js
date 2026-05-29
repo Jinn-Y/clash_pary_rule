@@ -64,6 +64,7 @@ const rules = [
   "RULE-SET,mastercard,💰 金融服务",
   "RULE-SET,stripe,💰 金融服务",
   "RULE-SET,wise,💰 金融服务",
+  "RULE-SET,crypto,💹 交易所",
   "RULE-SET,azure,☁️ 云服务",
   "RULE-SET,digitalocean,☁️ 云服务",
   "RULE-SET,heroku,☁️ 云服务",
@@ -161,6 +162,7 @@ const ruleProviders = {
   "mastercard": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/mastercard.mrs", "path": "./ruleset/mastercard.mrs" },
   "stripe": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/stripe.mrs", "path": "./ruleset/stripe.mrs" },
   "wise": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/wise.mrs", "path": "./ruleset/wise.mrs" },
+  "crypto": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt", "path": "./ruleset/crypto.txt" },
   "aws": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/aws.mrs", "path": "./ruleset/aws.mrs" },
   "azure": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/azure.mrs", "path": "./ruleset/azure.mrs" },
   "digitalocean": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/digitalocean.mrs", "path": "./ruleset/digitalocean.mrs" },
@@ -204,7 +206,7 @@ const regionKeywords = {
 const ruleGroupNames = [
   '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
   '🔒 国内服务', '📲 电报消息', '🐱 Github', 'Ⓜ️ 微软服务', '🍏 苹果服务',
-  '🌐 社交媒体', '🎬 流媒体', '🎮 游戏平台', '📚 教育资源', '💰 金融服务',
+  '🌐 社交媒体', '🎬 流媒体', '🎮 游戏平台', '📚 教育资源', '💰 金融服务', '💹 交易所',
   '☁️ 云服务', '🌐 非中国', '🐟 漏网之鱼'
 ];
 
@@ -225,6 +227,7 @@ const ruleGroupDefaults = {
   '🎮 游戏平台': '🚀 节点选择',        // 游戏平台使用日本节点
   '📚 教育资源': '⚡ 自动选择',      // 教育资源使用自动选择
   '💰 金融服务': '🇺🇸 美国',        // 金融服务使用美国节点
+  '💹 交易所': '🇯🇵 日本',          // 交易所使用日本节点
   '☁️ 云服务': '🇺🇸 美国',        // 云服务使用自动选择
   '🌐 非中国': '🚀 节点选择',        // 非中国地区使用自动选择
   '🐟 漏网之鱼': '🚀 节点选择'       // 漏网之鱼使用节点选择
