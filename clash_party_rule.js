@@ -185,7 +185,7 @@ const regionKeywords = {
   "🇺🇸 美国": { keywords: ["美", "US", "United States", "America", "Los Angeles", "San Francisco", "Silicon Valley"] },
   "🇸🇬 新加坡": { keywords: ["新", "SG", "Singapore", "SGP"] },
   "🇰🇷 韩国": { keywords: ["韩", "KR", "Korea", "Seoul"] },
-  "🇬🇧 英国": { keywords: ["英", "UK", "United Kingdom", "London", "Britain", "England"] },
+  "🇬🇧 英国": { keywords: ["英", "UK", "GB", "United Kingdom", "London", "Britain", "England"] },
   "🇩🇪 德国": { keywords: ["德", "DE", "Germany", "Frankfurt"] },
   "🇫🇷 法国": { keywords: ["法", "FR", "France", "Paris"] },
   "🇨🇦 加拿大": { keywords: ["加", "CA", "Canada", "Montreal", "Toronto", "Vancouver"] },
@@ -202,6 +202,22 @@ const regionKeywords = {
 };
 
 // 地区分组生成逻辑已移入 main 函数以支持动态过滤
+
+function escapeRegexValue(value) {
+  return value.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+}
+
+function createRegionFilter(keywords) {
+  return keywords
+    .map(keyword => {
+      const escapedKeyword = escapeRegexValue(keyword);
+      if (/^[A-Za-z0-9]{2,3}$/.test(keyword)) {
+        return `(?:^|[^A-Za-z0-9])${escapedKeyword}(?:$|[^A-Za-z0-9])`;
+      }
+      return escapedKeyword;
+    })
+    .join("|");
+}
 
 const ruleGroupNames = [
   '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
@@ -258,7 +274,7 @@ function main(config) {
       name,
       type: "select",
       "include-all": true,
-      filter: keywords.join("|"),
+      filter: createRegionFilter(keywords),
     };
 
     if (defaultName) {
@@ -277,7 +293,7 @@ function main(config) {
     }
 
     // 检查是否有节点匹配该地区的关键字
-    const regex = new RegExp(keywords.join("|"));
+    const regex = new RegExp(createRegionFilter(keywords));
     if (!allProxies.some(p => regex.test(p.name))) {
       continue;
     }
