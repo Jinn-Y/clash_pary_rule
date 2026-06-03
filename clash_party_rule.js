@@ -17,13 +17,12 @@ const rules = [
   // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
   // ******** 工作规则 ********************* //
   "DOMAIN-SUFFIX,jinnll.xyz,🇺🇸 美国",
-  "DOMAIN-SUFFIX,weajp.com,🏢 工作直连",
-  "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
-  "RULE-SET,amazon,🏢 工作直连",
-  "RULE-SET,aws,🏢 工作直连",
-  "DOMAIN-KEYWORD,starpay,🏢 工作直连",
-  "DOMAIN-SUFFIX,starboss.biz,🏢 工作直连",
-  "DOMAIN-KEYWORD,atlassian,🏢 工作直连",
+  "DOMAIN-SUFFIX,weajp.com,DIRECT",
+  "DOMAIN-SUFFIX,starboss.biz,DIRECT",
+  "RULE-SET,amazon,DIRECT",
+  "RULE-SET,aws,DIRECT",
+  "DOMAIN-KEYWORD,starpay,DIRECT",
+  "DOMAIN-KEYWORD,atlassian,DIRECT",
   // ******** 工作规则 ********************* //
   "RULE-SET,category-bank-cn,DIRECT",
   "RULE-SET,talkatone,🇺🇸 美国",
@@ -354,11 +353,6 @@ function main(config) {
       "type": "select",
       "name": "🛑 广告拦截",
       "proxies": ["REJECT", "DIRECT"]
-    },
-    {
-      "type": "select",
-      "name": "🏢 工作直连",
-      "proxies": ["DIRECT"]
     },
     ...dynamicOtherRuleGroups
   ];
