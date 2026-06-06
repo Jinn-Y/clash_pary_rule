@@ -114,7 +114,7 @@ const geoConfig = {
   }
 };
 
-const scriptOptions = {
+const defaultScriptOptions = {
   enableChainProxy: true,
   maxChainProxyCount: 80,
   chainProxyNamePattern: ""
@@ -241,15 +241,47 @@ function uniqueList(items) {
   return [...new Set(items.filter(Boolean))];
 }
 
+function combineFilters(left, right) {
+  if (!left) {
+    return right;
+  }
+  if (!right || left === right) {
+    return left;
+  }
+  return `^(?=.*(?:${left}))(?=.*(?:${right})).*$`;
+}
+
+function mergeProxyGroup(existingGroup, generatedGroup) {
+  const merged = { ...existingGroup, ...generatedGroup };
+
+  if (Array.isArray(existingGroup.proxies) && Array.isArray(generatedGroup.proxies)) {
+    merged.proxies = uniqueList([...existingGroup.proxies, ...generatedGroup.proxies]);
+  }
+
+  if (existingGroup.filter && generatedGroup.filter) {
+    merged.filter = combineFilters(existingGroup.filter, generatedGroup.filter);
+  }
+
+  if (existingGroup["include-all"] || generatedGroup["include-all"]) {
+    merged["include-all"] = true;
+  }
+
+  return merged;
+}
+
 function mergeProxyGroups(existingGroups, generatedGroups) {
   const groups = new Map();
-  (existingGroups || []).forEach(group => {
+  const existing = Array.isArray(existingGroups) ? existingGroups : [];
+  const generated = Array.isArray(generatedGroups) ? generatedGroups : [];
+
+  existing.forEach(group => {
     if (group?.name) {
       groups.set(group.name, group);
     }
   });
-  generatedGroups.forEach(group => {
-    groups.set(group.name, group);
+  generated.forEach(group => {
+    const existingGroup = groups.get(group.name);
+    groups.set(group.name, existingGroup ? mergeProxyGroup(existingGroup, group) : group);
   });
   return [...groups.values()];
 }
@@ -289,6 +321,26 @@ function createOptionalRegex(pattern) {
   }
 }
 
+function resolveScriptOptions(config) {
+  const userOptions = config?.["x-script-options"];
+  if (!userOptions || typeof userOptions !== "object") {
+    return { ...defaultScriptOptions };
+  }
+
+  const maxChainProxyCount = Number(userOptions.maxChainProxyCount);
+  return {
+    ...defaultScriptOptions,
+    ...userOptions,
+    maxChainProxyCount: Number.isFinite(maxChainProxyCount) && maxChainProxyCount > 0
+      ? maxChainProxyCount
+      : defaultScriptOptions.maxChainProxyCount
+  };
+}
+
+function getProxyName(proxy) {
+  return typeof proxy?.name === "string" ? proxy.name : "";
+}
+
 const ruleGroupNames = [
   '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
   '🔒 国内服务', '📲 电报消息', '🐱 Github', 'Ⓜ️ 微软服务', '🍏 苹果服务',
@@ -323,15 +375,20 @@ const ruleGroupDefaults = {
 
 // 程序入口
 function main(config) {
-  const proxyCount = config?.proxies?.length ?? 0;
+  config = config || {};
+
+  const userScriptOptions = resolveScriptOptions(config);
+  const scriptWarnings = [];
+  const allProxies = Array.isArray(config.proxies) ? config.proxies : [];
+  const proxyProviders = config["proxy-providers"];
+  const proxyCount = allProxies.length;
   const proxyProviderCount =
-    typeof config?.["proxy-providers"] === "object" ? Object.keys(config["proxy-providers"]).length : 0;
+    proxyProviders && typeof proxyProviders === "object" ? Object.keys(proxyProviders).length : 0;
   if (proxyCount === 0 && proxyProviderCount === 0) {
     throw new Error("配置文件中未找到任何代理");
   }
 
   // --- 动态生成节点组 ---
-  const allProxies = config.proxies || [];
   const hasStaticProxies = allProxies.length > 0;
   const hasProxyProviders = proxyProviderCount > 0;
 
@@ -363,8 +420,8 @@ function main(config) {
     }
 
     // 检查是否有节点匹配该地区的关键字
-    const regex = new RegExp(createRegionFilter(keywords));
-    if (!allProxies.some(p => regex.test(p.name))) {
+    const regex = new RegExp(createRegionFilter(keywords), "i");
+    if (!allProxies.some(p => regex.test(getProxyName(p)))) {
       continue;
     }
 
@@ -373,7 +430,7 @@ function main(config) {
     // 为美国节点组设置默认节点(优先选择VMISS)
     if (name === "🇺🇸 美国") {
       const vmissNode = allProxies.find(p =>
-        regex.test(p.name) && p.name.includes("VMISS")
+        regex.test(getProxyName(p)) && getProxyName(p).toUpperCase().includes("VMISS")
       );
       if (vmissNode) {
         defaultName = vmissNode.name;
@@ -430,15 +487,23 @@ function main(config) {
 
   // --- 基于 dialer-proxy 的精简版链式代理生成 ---
   const originalProxies = allProxies;
-  const chainProxyRegex = createOptionalRegex(scriptOptions.chainProxyNamePattern);
+  const chainProxyRegex = createOptionalRegex(userScriptOptions.chainProxyNamePattern);
+  const chainCandidateProxies = originalProxies.filter(proxy => getProxyName(proxy));
   const chainSourceProxies = chainProxyRegex
-    ? originalProxies.filter(proxy => chainProxyRegex.test(proxy.name))
-    : originalProxies;
+    ? chainCandidateProxies.filter(proxy => chainProxyRegex.test(getProxyName(proxy)))
+    : chainCandidateProxies;
+  const exceedsChainProxyLimit = chainSourceProxies.length > userScriptOptions.maxChainProxyCount;
   const canBuildChainProxy =
     hasStaticProxies &&
-    scriptOptions.enableChainProxy &&
+    userScriptOptions.enableChainProxy &&
     chainSourceProxies.length > 0 &&
-    chainSourceProxies.length <= scriptOptions.maxChainProxyCount;
+    !exceedsChainProxyLimit;
+
+  if (hasStaticProxies && userScriptOptions.enableChainProxy && exceedsChainProxyLimit) {
+    scriptWarnings.push(
+      `链式代理未启用：匹配节点数 ${chainSourceProxies.length} 超过 maxChainProxyCount=${userScriptOptions.maxChainProxyCount}`
+    );
+  }
 
   if (canBuildChainProxy) {
     // 1. 仅为出口节点创建带有拨号代理的克隆 (入口直接复用原节点)
@@ -447,7 +512,7 @@ function main(config) {
     chainSourceProxies.forEach(proxy => {
       // 出口节点,通过 ⛓️ 入口节点 中转
       const l2Proxy = { ...proxy };
-      l2Proxy.name = `${proxy.name} ↘️`;
+      l2Proxy.name = `${getProxyName(proxy)} ↘️`;
       l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
       level2Proxies.push(l2Proxy);
     });
@@ -497,7 +562,7 @@ function main(config) {
 
   // 7. 将"链式代理"添加到主选择器中
   const mainSelector = finalProxyGroups.find(g => g.name === '🚀 节点选择');
-  if (canBuildChainProxy && mainSelector) {
+  if (canBuildChainProxy && Array.isArray(mainSelector?.proxies) && !mainSelector.proxies.includes('⛓️ 链式代理')) {
     // 插入到 '⚡ 自动选择' 之后
     mainSelector.proxies.splice(3, 0, '⛓️ 链式代理');
   }
@@ -507,7 +572,7 @@ function main(config) {
     if (!canBuildChainProxy) {
       return;
     }
-    if (ruleGroupNames.includes(group.name) && !group.proxies.includes('⛓️ 链式代理')) {
+    if (ruleGroupNames.includes(group.name) && Array.isArray(group.proxies) && !group.proxies.includes('⛓️ 链式代理')) {
       group.proxies.splice(4, 0, '⛓️ 链式代理');
     }
   });
@@ -523,6 +588,11 @@ function main(config) {
   config["rule-providers"] = { ...(config["rule-providers"] || {}), ...ruleProviders };
   config["proxy-groups"] = mergeProxyGroups(config["proxy-groups"], finalProxyGroups);
   config.rules = mergeRules(config.rules, rules);
+
+  if (scriptWarnings.length > 0) {
+    const existingWarnings = Array.isArray(config["x-script-warnings"]) ? config["x-script-warnings"] : [];
+    config["x-script-warnings"] = uniqueList([...existingWarnings, ...scriptWarnings]);
+  }
 
   // 返回修改后的配置
   return config;
