@@ -16,7 +16,7 @@ const rules = [
   "DOMAIN,open.e.189.cn,DIRECT",
   // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
   // ******** 工作规则 ********************* //
-  "DOMAIN-SUFFIX,jinnll.xyz,🇺🇸 美国",
+  "DOMAIN-SUFFIX,jinnll.xyz,🚀 节点选择",
   "DOMAIN-SUFFIX,weajp.com,DIRECT",
   "DOMAIN-SUFFIX,starboss.biz,DIRECT",
   "RULE-SET,amazon,DIRECT",
@@ -25,15 +25,15 @@ const rules = [
   "DOMAIN-KEYWORD,atlassian,DIRECT",
   // ******** 工作规则 ********************* //
   "RULE-SET,category-bank-cn,DIRECT",
-  "RULE-SET,talkatone,🇺🇸 美国",
-  "RULE-SET,whatsapp,🇺🇸 美国",
+  "RULE-SET,talkatone,🌐 社交媒体",
+  "RULE-SET,whatsapp,🌐 社交媒体",
   "RULE-SET,category-ads-all,🛑 广告拦截",
   "RULE-SET,category-ai-!cn,💬 AI 服务",
   "RULE-SET,bilibili,📺 哔哩哔哩",
   "RULE-SET,youtube,📹 油管视频",
   "RULE-SET,google,🔍 谷歌服务",
+  "RULE-SET,google-ip,🔍 谷歌服务,no-resolve",
   "RULE-SET,geolocation-cn,🔒 国内服务",
-  "RULE-SET,cn,🔒 国内服务",
   "RULE-SET,github,🐱 Github",
   "RULE-SET,gitlab,🐱 Github",
   "RULE-SET,microsoft,Ⓜ️ 微软服务",
@@ -69,7 +69,6 @@ const rules = [
   "RULE-SET,heroku,☁️ 云服务",
   "RULE-SET,dropbox,☁️ 云服务",
   "RULE-SET,geolocation-!cn,🌐 非中国",
-  "RULE-SET,google,🔍 谷歌服务,no-resolve",
   "RULE-SET,private,🏠 私有网络,no-resolve",
   "RULE-SET,cn,🔒 国内服务,no-resolve",
   "RULE-SET,telegram,📲 电报消息,no-resolve",
@@ -108,11 +107,17 @@ const geoConfig = {
   "geodata-loader": "standard",
   "geo-update-interval": 24,
   "geox-url": {
-    "geoip": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat",
-    "geosite": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat",
-    "mmdb": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb",
+    "geoip": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat",
+    "geosite": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat",
+    "mmdb": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb",
     "asn": "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb"
   }
+};
+
+const scriptOptions = {
+  enableChainProxy: true,
+  maxChainProxyCount: 80,
+  chainProxyNamePattern: ""
 };
 
 // 规则集通用配置
@@ -122,82 +127,96 @@ const ruleProviderCommon = {
   "interval": 86400
 };
 
+function metaRulesDatUrl(type, name) {
+  return `https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/${type}/${name}.mrs`;
+}
+
+function metaRulesDatProvider(type, name, behavior) {
+  return {
+    ...ruleProviderCommon,
+    behavior,
+    url: metaRulesDatUrl(type, name),
+    path: `./ruleset/${name}.mrs`
+  };
+}
+
 // 规则集配置 (源自 clash-yaml.yaml)
 const ruleProviders = {
-  "category-ads-all": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ads-all.mrs", "path": "./ruleset/category-ads-all.mrs" },
-  "category-ai-!cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs", "path": "./ruleset/category-ai-!cn.mrs" },
-  "bilibili": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bilibili.mrs", "path": "./ruleset/bilibili.mrs" },
-  "youtube": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/youtube.mrs", "path": "./ruleset/youtube.mrs" },
-  "google": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/google.mrs", "path": "./ruleset/google.mrs" },
-  "geolocation-cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/geolocation-cn.mrs", "path": "./ruleset/geolocation-cn.mrs" },
-  "cn": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cn.mrs", "path": "./ruleset/cn.mrs" },
-  "github": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/github.mrs", "path": "./ruleset/github.mrs" },
-  "gitlab": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gitlab.mrs", "path": "./ruleset/gitlab.mrs" },
-  "microsoft": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft.mrs", "path": "./ruleset/microsoft.mrs" },
-  "apple": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple.mrs", "path": "./ruleset/apple.mrs" },
-  "facebook": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/facebook.mrs", "path": "./ruleset/facebook.mrs" },
-  "instagram": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/instagram.mrs", "path": "./ruleset/instagram.mrs" },
-  "twitter": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/twitter.mrs", "path": "./ruleset/twitter.mrs" },
-  "tiktok": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tiktok.mrs", "path": "./ruleset/tiktok.mrs" },
-  "linkedin": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/linkedin.mrs", "path": "./ruleset/linkedin.mrs" },
-  "netflix": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/netflix.mrs", "path": "./ruleset/netflix.mrs" },
-  "hulu": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/hulu.mrs", "path": "./ruleset/hulu.mrs" },
-  "disney": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/disney.mrs", "path": "./ruleset/disney.mrs" },
-  "hbo": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/hbo.mrs", "path": "./ruleset/hbo.mrs" },
-  "amazon": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/amazon.mrs", "path": "./ruleset/amazon.mrs" },
-  "bahamut": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bahamut.mrs", "path": "./ruleset/bahamut.mrs" },
-  "steam": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam.mrs", "path": "./ruleset/steam.mrs" },
-  "epicgames": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/epicgames.mrs", "path": "./ruleset/epicgames.mrs" },
-  "ea": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ea.mrs", "path": "./ruleset/ea.mrs" },
-  "ubisoft": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ubisoft.mrs", "path": "./ruleset/ubisoft.mrs" },
-  "blizzard": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/blizzard.mrs", "path": "./ruleset/blizzard.mrs" },
-  "coursera": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/coursera.mrs", "path": "./ruleset/coursera.mrs" },
-  "edx": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/edx.mrs", "path": "./ruleset/edx.mrs" },
-  "udemy": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/udemy.mrs", "path": "./ruleset/udemy.mrs" },
-  "khanacademy": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/khanacademy.mrs", "path": "./ruleset/khanacademy.mrs" },
-  "category-scholar-!cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-scholar-!cn.mrs", "path": "./ruleset/category-scholar-!cn.mrs" },
-  "paypal": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/paypal.mrs", "path": "./ruleset/paypal.mrs" },
-  "visa": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/visa.mrs", "path": "./ruleset/visa.mrs" },
-  "mastercard": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/mastercard.mrs", "path": "./ruleset/mastercard.mrs" },
-  "stripe": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/stripe.mrs", "path": "./ruleset/stripe.mrs" },
-  "wise": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/wise.mrs", "path": "./ruleset/wise.mrs" },
+  "category-ads-all": metaRulesDatProvider("geosite", "category-ads-all", "domain"),
+  "category-ai-!cn": metaRulesDatProvider("geosite", "category-ai-!cn", "domain"),
+  "bilibili": metaRulesDatProvider("geosite", "bilibili", "domain"),
+  "youtube": metaRulesDatProvider("geosite", "youtube", "domain"),
+  "google": metaRulesDatProvider("geosite", "google", "domain"),
+  "google-ip": { ...metaRulesDatProvider("geoip", "google", "ipcidr"), path: "./ruleset/google-ip.mrs" },
+  "geolocation-cn": metaRulesDatProvider("geosite", "geolocation-cn", "domain"),
+  "cn": metaRulesDatProvider("geoip", "cn", "ipcidr"),
+  "github": metaRulesDatProvider("geosite", "github", "domain"),
+  "gitlab": metaRulesDatProvider("geosite", "gitlab", "domain"),
+  "microsoft": metaRulesDatProvider("geosite", "microsoft", "domain"),
+  "apple": metaRulesDatProvider("geosite", "apple", "domain"),
+  "facebook": metaRulesDatProvider("geosite", "facebook", "domain"),
+  "instagram": metaRulesDatProvider("geosite", "instagram", "domain"),
+  "twitter": metaRulesDatProvider("geosite", "twitter", "domain"),
+  "tiktok": metaRulesDatProvider("geosite", "tiktok", "domain"),
+  "linkedin": metaRulesDatProvider("geosite", "linkedin", "domain"),
+  "netflix": metaRulesDatProvider("geosite", "netflix", "domain"),
+  "hulu": metaRulesDatProvider("geosite", "hulu", "domain"),
+  "disney": metaRulesDatProvider("geosite", "disney", "domain"),
+  "hbo": metaRulesDatProvider("geosite", "hbo", "domain"),
+  "amazon": metaRulesDatProvider("geosite", "amazon", "domain"),
+  "bahamut": metaRulesDatProvider("geosite", "bahamut", "domain"),
+  "steam": metaRulesDatProvider("geosite", "steam", "domain"),
+  "epicgames": metaRulesDatProvider("geosite", "epicgames", "domain"),
+  "ea": metaRulesDatProvider("geosite", "ea", "domain"),
+  "ubisoft": metaRulesDatProvider("geosite", "ubisoft", "domain"),
+  "blizzard": metaRulesDatProvider("geosite", "blizzard", "domain"),
+  "coursera": metaRulesDatProvider("geosite", "coursera", "domain"),
+  "edx": metaRulesDatProvider("geosite", "edx", "domain"),
+  "udemy": metaRulesDatProvider("geosite", "udemy", "domain"),
+  "khanacademy": metaRulesDatProvider("geosite", "khanacademy", "domain"),
+  "category-scholar-!cn": metaRulesDatProvider("geosite", "category-scholar-!cn", "domain"),
+  "paypal": metaRulesDatProvider("geosite", "paypal", "domain"),
+  "visa": metaRulesDatProvider("geosite", "visa", "domain"),
+  "mastercard": metaRulesDatProvider("geosite", "mastercard", "domain"),
+  "stripe": metaRulesDatProvider("geosite", "stripe", "domain"),
+  "wise": metaRulesDatProvider("geosite", "wise", "domain"),
   "crypto": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt", "path": "./ruleset/crypto.txt" },
-  "aws": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/aws.mrs", "path": "./ruleset/aws.mrs" },
-  "azure": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/azure.mrs", "path": "./ruleset/azure.mrs" },
-  "digitalocean": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/digitalocean.mrs", "path": "./ruleset/digitalocean.mrs" },
-  "heroku": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/heroku.mrs", "path": "./ruleset/heroku.mrs" },
-  "dropbox": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/dropbox.mrs", "path": "./ruleset/dropbox.mrs" },
-  "geolocation-!cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/geolocation-!cn.mrs", "path": "./ruleset/geolocation-!cn.mrs" },
-  "private": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/private.mrs", "path": "./ruleset/private.mrs" },
-  "telegram": { ...ruleProviderCommon, "behavior": "ipcidr", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs", "path": "./ruleset/telegram.mrs" },
-  "talkatone": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/talkatone.mrs", "path": "./ruleset/talkatone.mrs" },
-  "whatsapp": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/whatsapp.mrs", "path": "./ruleset/whatsapp.mrs" },
-  "category-bank-cn": { ...ruleProviderCommon, "behavior": "domain", "url": "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-bank-cn.mrs", "path": "./ruleset/category-bank-cn.mrs" },
+  "aws": metaRulesDatProvider("geosite", "aws", "domain"),
+  "azure": metaRulesDatProvider("geosite", "azure", "domain"),
+  "digitalocean": metaRulesDatProvider("geosite", "digitalocean", "domain"),
+  "heroku": metaRulesDatProvider("geosite", "heroku", "domain"),
+  "dropbox": metaRulesDatProvider("geosite", "dropbox", "domain"),
+  "geolocation-!cn": metaRulesDatProvider("geosite", "geolocation-!cn", "domain"),
+  "private": metaRulesDatProvider("geoip", "private", "ipcidr"),
+  "telegram": metaRulesDatProvider("geoip", "telegram", "ipcidr"),
+  "talkatone": metaRulesDatProvider("geosite", "talkatone", "domain"),
+  "whatsapp": metaRulesDatProvider("geosite", "whatsapp", "domain"),
+  "category-bank-cn": metaRulesDatProvider("geosite", "category-bank-cn", "domain"),
 };
 
 
 // 地区关键词映射表 (参考 clash-js.js)
 const regionKeywords = {
-  "🇭🇰 香港": { keywords: ["港", "HK", "Hong Kong", "HKG"] },
-  "🇹🇼 台湾": { keywords: ["台", "TW", "Taiwan", "Taipei"] },
-  "🇯🇵 日本": { keywords: ["日", "JP", "Japan", "Tokyo", "Osaka", "Saitama"] },
-  "🇺🇸 美国": { keywords: ["美", "US", "United States", "America", "Los Angeles", "San Francisco", "Silicon Valley"] },
-  "🇸🇬 新加坡": { keywords: ["新", "SG", "Singapore", "SGP"] },
-  "🇰🇷 韩国": { keywords: ["韩", "KR", "Korea", "Seoul"] },
-  "🇬🇧 英国": { keywords: ["英", "UK", "GB", "United Kingdom", "London", "Britain", "England"] },
-  "🇩🇪 德国": { keywords: ["德", "DE", "Germany", "Frankfurt"] },
-  "🇫🇷 法国": { keywords: ["法", "FR", "France", "Paris"] },
-  "🇨🇦 加拿大": { keywords: ["加", "CA", "Canada", "Montreal", "Toronto", "Vancouver"] },
-  "🇦🇺 澳大利亚": { keywords: ["澳", "AU", "Australia", "Sydney"] },
-  "🇮🇳 印度": { keywords: ["印", "IN", "India", "Mumbai"] },
-  "🇷🇺 俄罗斯": { keywords: ["俄", "RU", "Russia", "Moscow"] },
-  "🇳🇱 荷兰": { keywords: ["荷", "NL", "Netherlands", "Amsterdam"] },
-  "🇹🇷 土耳其": { keywords: ["土", "TR", "Turkey", "Istanbul"] },
-  "🇦🇷 阿根廷": { keywords: ["阿", "AR", "Argentina"] },
-  "🇵🇭 菲律宾": { keywords: ["菲", "PH", "Philippines"] },
-  "🇲🇾 马来西亚": { keywords: ["马", "MY", "Malaysia"] },
-  "🇹🇭 泰国": { keywords: ["泰", "TH", "Thailand"] },
-  "🇻🇳 越南": { keywords: ["越", "VN", "Vietnam"] }
+  "🇭🇰 香港": { keywords: ["香港", "HK", "Hong Kong", "HKG"] },
+  "🇹🇼 台湾": { keywords: ["台湾", "台灣", "TW", "Taiwan", "Taipei"] },
+  "🇯🇵 日本": { keywords: ["日本", "东京", "東京", "大阪", "埼玉", "JP", "Japan", "Tokyo", "Osaka", "Saitama"] },
+  "🇺🇸 美国": { keywords: ["美国", "美國", "US", "USA", "United States", "America", "Los Angeles", "San Francisco", "Silicon Valley"] },
+  "🇸🇬 新加坡": { keywords: ["新加坡", "SG", "Singapore", "SGP"] },
+  "🇰🇷 韩国": { keywords: ["韩国", "韓國", "KR", "Korea", "Seoul"] },
+  "🇬🇧 英国": { keywords: ["英国", "英國", "UK", "GB", "United Kingdom", "London", "Britain", "England"] },
+  "🇩🇪 德国": { keywords: ["德国", "德國", "DE", "Germany", "Frankfurt"] },
+  "🇫🇷 法国": { keywords: ["法国", "法國", "FR", "France", "Paris"] },
+  "🇨🇦 加拿大": { keywords: ["加拿大", "CA", "Canada", "Montreal", "Toronto", "Vancouver"] },
+  "🇦🇺 澳大利亚": { keywords: ["澳大利亚", "澳洲", "AU", "Australia", "Sydney"] },
+  "🇮🇳 印度": { keywords: ["印度", "IN", "India", "Mumbai"] },
+  "🇷🇺 俄罗斯": { keywords: ["俄罗斯", "俄羅斯", "RU", "Russia", "Moscow"] },
+  "🇳🇱 荷兰": { keywords: ["荷兰", "荷蘭", "NL", "Netherlands", "Amsterdam"] },
+  "🇹🇷 土耳其": { keywords: ["土耳其", "TR", "Turkey", "Istanbul"] },
+  "🇦🇷 阿根廷": { keywords: ["阿根廷", "AR", "Argentina"] },
+  "🇵🇭 菲律宾": { keywords: ["菲律宾", "菲律賓", "PH", "Philippines"] },
+  "🇲🇾 马来西亚": { keywords: ["马来西亚", "馬來西亞", "MY", "Malaysia"] },
+  "🇹🇭 泰国": { keywords: ["泰国", "泰國", "TH", "Thailand"] },
+  "🇻🇳 越南": { keywords: ["越南", "VN", "Vietnam"] }
 };
 
 // 地区分组生成逻辑已移入 main 函数以支持动态过滤
@@ -218,6 +237,58 @@ function createRegionFilter(keywords) {
     .join("|");
 }
 
+function uniqueList(items) {
+  return [...new Set(items.filter(Boolean))];
+}
+
+function mergeProxyGroups(existingGroups, generatedGroups) {
+  const groups = new Map();
+  (existingGroups || []).forEach(group => {
+    if (group?.name) {
+      groups.set(group.name, group);
+    }
+  });
+  generatedGroups.forEach(group => {
+    groups.set(group.name, group);
+  });
+  return [...groups.values()];
+}
+
+function mergeRules(existingRules, generatedRules) {
+  const existing = Array.isArray(existingRules) ? existingRules : [];
+  const existingNonMatch = existing.filter(rule => !String(rule).startsWith("MATCH,"));
+  const existingMatch = existing.find(rule => String(rule).startsWith("MATCH,"));
+  const generatedNonMatch = generatedRules.filter(rule => !String(rule).startsWith("MATCH,"));
+  const generatedMatch = generatedRules.find(rule => String(rule).startsWith("MATCH,"));
+  return uniqueList([
+    ...existingNonMatch,
+    ...generatedNonMatch,
+    existingMatch || generatedMatch
+  ]);
+}
+
+function mergeDnsConfig(existingDns, generatedDns) {
+  return {
+    ...(existingDns || {}),
+    ...generatedDns,
+    "nameserver-policy": {
+      ...((existingDns || {})["nameserver-policy"] || {}),
+      ...(generatedDns["nameserver-policy"] || {})
+    }
+  };
+}
+
+function createOptionalRegex(pattern) {
+  if (!pattern) {
+    return null;
+  }
+  try {
+    return new RegExp(pattern);
+  } catch {
+    return null;
+  }
+}
+
 const ruleGroupNames = [
   '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
   '🔒 国内服务', '📲 电报消息', '🐱 Github', 'Ⓜ️ 微软服务', '🍏 苹果服务',
@@ -227,23 +298,23 @@ const ruleGroupNames = [
 
 // 为每个规则组定义默认节点
 const ruleGroupDefaults = {
-  '💬 AI 服务': '🇺🇸 美国',      // AI 服务使用自动选择
+  '💬 AI 服务': '🇺🇸 美国',      // AI 服务默认使用美国节点
   '📺 哔哩哔哩': 'DIRECT',          // 哔哩哔哩直连
   '📹 油管视频': '🇭🇰 香港',        // 油管使用香港节点
-  '🔍 谷歌服务': '🇺🇸 美国',      // 谷歌服务使用自动选择
+  '🔍 谷歌服务': '🇺🇸 美国',      // 谷歌服务默认使用美国节点
   '🏠 私有网络': 'DIRECT',          // 私有网络直连
   '🔒 国内服务': 'DIRECT',          // 国内服务直连
   '📲 电报消息': '🚀 节点选择',      // 电报使用自动选择
   '🐱 Github': '🚀 节点选择',        // Github 使用自动选择
   'Ⓜ️ 微软服务': '⚡ 自动选择',     // 微软服务使用自动选择
   '🍏 苹果服务': 'DIRECT',          // 苹果服务直连
-  '🌐 社交媒体': '🇺🇸 美国',      // 社交媒体使用自动选择
-  '🎬 流媒体': '🚀 节点选择',          // 流媒体使用香港节点
-  '🎮 游戏平台': '🚀 节点选择',        // 游戏平台使用日本节点
+  '🌐 社交媒体': '🇺🇸 美国',      // 社交媒体默认使用美国节点
+  '🎬 流媒体': '🚀 节点选择',          // 流媒体默认使用主选择器
+  '🎮 游戏平台': '🚀 节点选择',        // 游戏平台默认使用主选择器
   '📚 教育资源': '⚡ 自动选择',      // 教育资源使用自动选择
   '💰 金融服务': '🇺🇸 美国',        // 金融服务使用美国节点
   '💹 交易所': '🇯🇵 日本',          // 交易所使用日本节点
-  '☁️ 云服务': '🇺🇸 美国',        // 云服务使用自动选择
+  '☁️ 云服务': '🇺🇸 美国',        // 云服务默认使用美国节点
   '🌐 非中国': '🚀 节点选择',        // 非中国地区使用自动选择
   '🐟 漏网之鱼': '🚀 节点选择'       // 漏网之鱼使用节点选择
 };
@@ -314,7 +385,7 @@ function main(config) {
   }
 
   // 2. 生成 ruleGroupProxies (动态)
-  const dynamicRuleGroupProxies = ['🚀 节点选择', 'DIRECT', 'REJECT', '⚡ 自动选择', ...validRegionNames];
+  const dynamicRuleGroupProxies = ['🚀 节点选择', 'DIRECT', '⚡ 自动选择', ...validRegionNames];
 
   // 3. 生成 otherRuleGroups (动态)
   const dynamicOtherRuleGroups = ruleGroupNames.map(name => {
@@ -359,13 +430,21 @@ function main(config) {
 
   // --- 基于 dialer-proxy 的精简版链式代理生成 ---
   const originalProxies = allProxies;
-  const canBuildChainProxy = hasStaticProxies;
+  const chainProxyRegex = createOptionalRegex(scriptOptions.chainProxyNamePattern);
+  const chainSourceProxies = chainProxyRegex
+    ? originalProxies.filter(proxy => chainProxyRegex.test(proxy.name))
+    : originalProxies;
+  const canBuildChainProxy =
+    hasStaticProxies &&
+    scriptOptions.enableChainProxy &&
+    chainSourceProxies.length > 0 &&
+    chainSourceProxies.length <= scriptOptions.maxChainProxyCount;
 
   if (canBuildChainProxy) {
     // 1. 仅为出口节点创建带有拨号代理的克隆 (入口直接复用原节点)
     const level2Proxies = [];  // 出口节点
 
-    originalProxies.forEach(proxy => {
+    chainSourceProxies.forEach(proxy => {
       // 出口节点,通过 ⛓️ 入口节点 中转
       const l2Proxy = { ...proxy };
       l2Proxy.name = `${proxy.name} ↘️`;
@@ -434,16 +513,16 @@ function main(config) {
   });
   // --- 结束二级链式代理生成 ---
 
-  // 覆盖 DNS 配置
-  config.dns = dnsConfig;
+  // 合并 DNS 配置
+  config.dns = mergeDnsConfig(config.dns, dnsConfig);
 
   // 覆盖 GeoIP/Geosite 相关配置
   Object.assign(config, geoConfig);
 
-  // 覆盖 规则集、代理组和规则
-  config["rule-providers"] = ruleProviders;
-  config["proxy-groups"] = finalProxyGroups;
-  config.rules = rules;
+  // 合并规则集、代理组和规则，保留原订阅中的自定义内容
+  config["rule-providers"] = { ...(config["rule-providers"] || {}), ...ruleProviders };
+  config["proxy-groups"] = mergeProxyGroups(config["proxy-groups"], finalProxyGroups);
+  config.rules = mergeRules(config.rules, rules);
 
   // 返回修改后的配置
   return config;
