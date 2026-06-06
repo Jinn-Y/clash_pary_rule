@@ -529,8 +529,9 @@ function main(config) {
       group.filter = excludeChainFilter;
     } else if (group['include-all'] && group.filter) {
       // 如果已有 filter,需要同时满足原 filter 和排除链式节点
-      const originalFilter = group.filter;
-      group.filter = `^(?=.*(?:${originalFilter}))(?!.*(↘️)).*$`;
+      // 使用 combineFilters() 避免将原 filter 直接嵌入 lookahead，
+      // 防止原 filter 内的 ^ / $ 锚点在 lookahead 上下文中失效
+      group.filter = combineFilters(group.filter, excludeChainFilter);
     }
   });
 
@@ -573,7 +574,9 @@ function main(config) {
       return;
     }
     if (ruleGroupNames.includes(group.name) && Array.isArray(group.proxies) && !group.proxies.includes('⛓️ 链式代理')) {
-      group.proxies.splice(4, 0, '⛓️ 链式代理');
+      // 使用 Math.min 防止 validRegionNames 为空时 proxies 不足 4 个元素导致插入位置越界
+      const insertPos = Math.min(4, group.proxies.length);
+      group.proxies.splice(insertPos, 0, '⛓️ 链式代理');
     }
   });
   // --- 结束二级链式代理生成 ---
