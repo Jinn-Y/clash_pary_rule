@@ -25,9 +25,10 @@ const rules = [
   "DOMAIN-KEYWORD,atlassian,DIRECT",
   // ******** 工作规则 ********************* //
   "RULE-SET,category-bank-cn,DIRECT",
+  "RULE-SET,category-ads-all,🛑 广告拦截",
+  "RULE-SET,talkatone-ads,🛑 广告拦截",
   "RULE-SET,talkatone,🌐 社交媒体",
   "RULE-SET,whatsapp,🌐 社交媒体",
-  "RULE-SET,category-ads-all,🛑 广告拦截",
   "RULE-SET,category-ai-!cn,💬 AI 服务",
   "RULE-SET,bilibili,📺 哔哩哔哩",
   "RULE-SET,youtube,📹 油管视频",
@@ -140,9 +141,10 @@ function metaRulesDatProvider(type, name, behavior) {
   };
 }
 
-// 规则集配置 (源自 clash-yaml.yaml)
+// 规则集配置
 const ruleProviders = {
   "category-ads-all": metaRulesDatProvider("geosite", "category-ads-all", "domain"),
+  "talkatone-ads": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/TalkatoneAntiAds.list", "path": "./ruleset/talkatone-ads.list" },
   "category-ai-!cn": metaRulesDatProvider("geosite", "category-ai-!cn", "domain"),
   "bilibili": metaRulesDatProvider("geosite", "bilibili", "domain"),
   "youtube": metaRulesDatProvider("geosite", "youtube", "domain"),
