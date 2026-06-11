@@ -71,7 +71,7 @@ const rules = [
   "RULE-SET,dropbox,☁️ 云服务",
   "RULE-SET,geolocation-!cn,🌐 非中国",
   "RULE-SET,private,🏠 私有网络,no-resolve",
-  "RULE-SET,cn,🔒 国内服务,no-resolve",
+  "RULE-SET,cn,🔒 国内服务",
   "RULE-SET,telegram,📲 电报消息,no-resolve",
   "MATCH,🐟 漏网之鱼"
 ];
