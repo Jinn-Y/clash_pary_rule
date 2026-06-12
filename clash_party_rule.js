@@ -1,5 +1,4 @@
 const rules = [
-  // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
   "DOMAIN,msmp.abchina.com.cn,REJECT",
   "DOMAIN,www.baidu.com,DIRECT",
   "DOMAIN,yunbusiness.ccb.com,DIRECT",
@@ -14,8 +13,9 @@ const rules = [
   "DOMAIN,easy-login.10099.com.cn,DIRECT",
   "DOMAIN-KEYWORD,-update.xoyocdn.com,DIRECT",
   "DOMAIN,open.e.189.cn,DIRECT",
-  // ******** 针对特定应用去代理检测跳过 (SGModule 转换) ******** //
-  // ******** 工作规则 ********************* //
+
+  "RULE-SET,private,🏠 私有网络,no-resolve",
+
   "DOMAIN-SUFFIX,jinnll.xyz,🚀 节点选择",
   "DOMAIN-SUFFIX,weajp.com,DIRECT",
   "DOMAIN-SUFFIX,starboss.biz,DIRECT",
@@ -23,18 +23,18 @@ const rules = [
   "RULE-SET,aws,DIRECT",
   "DOMAIN-KEYWORD,starpay,DIRECT",
   "DOMAIN-KEYWORD,atlassian,DIRECT",
-  // ******** 工作规则 ********************* //
-  "RULE-SET,category-bank-cn,DIRECT",
+
   "RULE-SET,category-ads-all,🛑 广告拦截",
   "RULE-SET,talkatone-ads,🛑 广告拦截",
+  "RULE-SET,category-bank-cn,DIRECT",
   "RULE-SET,talkatone,🌐 社交媒体",
   "RULE-SET,whatsapp,🌐 社交媒体",
+  "RULE-SET,telegram,📲 电报消息,no-resolve",
   "RULE-SET,category-ai-!cn,💬 AI 服务",
   "RULE-SET,bilibili,📺 哔哩哔哩",
   "RULE-SET,youtube,📹 油管视频",
   "RULE-SET,google,🔍 谷歌服务",
   "RULE-SET,google-ip,🔍 谷歌服务,no-resolve",
-  "RULE-SET,geolocation-cn,🔒 国内服务",
   "RULE-SET,github,🐱 Github",
   "RULE-SET,gitlab,🐱 Github",
   "RULE-SET,microsoft,Ⓜ️ 微软服务",
@@ -69,10 +69,10 @@ const rules = [
   "RULE-SET,digitalocean,☁️ 云服务",
   "RULE-SET,heroku,☁️ 云服务",
   "RULE-SET,dropbox,☁️ 云服务",
+
   "RULE-SET,geolocation-!cn,🌐 非中国",
-  "RULE-SET,private,🏠 私有网络,no-resolve",
+  "RULE-SET,geolocation-cn,🔒 国内服务",
   "RULE-SET,cn,🔒 国内服务",
-  "RULE-SET,telegram,📲 电报消息,no-resolve",
   "MATCH,🐟 漏网之鱼"
 ];
 
@@ -101,7 +101,7 @@ const dnsConfig = {
   }
 };
 
-// GeoIP/Geosite 相关配置 (源自 clash-yaml.yaml)
+// GeoIP/Geosite 基础数据
 const geoConfig = {
   "geodata-mode": true,
   "geo-auto-update": true,
@@ -197,7 +197,7 @@ const ruleProviders = {
 };
 
 
-// 地区关键词映射表 (参考 clash-js.js)
+// 地区特征正则映射表
 const regionKeywords = {
   "🇭🇰 香港": { keywords: ["香港", "HK", "Hong Kong", "HKG"] },
   "🇹🇼 台湾": { keywords: ["台湾", "台灣", "TW", "Taiwan", "Taipei"] },
@@ -220,8 +220,6 @@ const regionKeywords = {
   "🇹🇭 泰国": { keywords: ["泰国", "泰國", "TH", "Thailand"] },
   "🇻🇳 越南": { keywords: ["越南", "VN", "Vietnam"] }
 };
-
-// 地区分组生成逻辑已移入 main 函数以支持动态过滤
 
 function escapeRegexValue(value) {
   return value.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
@@ -350,32 +348,28 @@ const ruleGroupNames = [
   '☁️ 云服务', '🌐 非中国', '🐟 漏网之鱼'
 ];
 
-// 为每个规则组定义默认节点
 const ruleGroupDefaults = {
-  '💬 AI 服务': '🇺🇸 美国',      // AI 服务默认使用美国节点
-  '📺 哔哩哔哩': 'DIRECT',          // 哔哩哔哩直连
-  '📹 油管视频': '🇭🇰 香港',        // 油管使用香港节点
-  '🔍 谷歌服务': '🇺🇸 美国',      // 谷歌服务默认使用美国节点
-  '🏠 私有网络': 'DIRECT',          // 私有网络直连
-  '🔒 国内服务': 'DIRECT',          // 国内服务直连
-  '📲 电报消息': '🚀 节点选择',      // 电报使用自动选择
-  '🐱 Github': '🚀 节点选择',        // Github 使用自动选择
-  'Ⓜ️ 微软服务': '⚡ 自动选择',     // 微软服务使用自动选择
-  '🍏 苹果服务': 'DIRECT',          // 苹果服务直连
-  '🌐 社交媒体': '🇺🇸 美国',      // 社交媒体默认使用美国节点
-  '🎬 流媒体': '🚀 节点选择',          // 流媒体默认使用主选择器
-  '🎮 游戏平台': '🚀 节点选择',        // 游戏平台默认使用主选择器
-  '📚 教育资源': '⚡ 自动选择',      // 教育资源使用自动选择
-  '💰 金融服务': '🇺🇸 美国',        // 金融服务使用美国节点
-  '💹 交易所': '🇯🇵 日本',          // 交易所使用日本节点
-  '☁️ 云服务': '🇺🇸 美国',        // 云服务默认使用美国节点
-  '🌐 非中国': '🚀 节点选择',        // 非中国地区使用自动选择
-  '🐟 漏网之鱼': '🚀 节点选择'       // 漏网之鱼使用节点选择
+  '💬 AI 服务': '🇺🇸 美国',
+  '📺 哔哩哔哩': 'DIRECT',
+  '📹 油管视频': '🇭🇰 香港',
+  '🔍 谷歌服务': '🇺🇸 美国',
+  '🏠 私有网络': 'DIRECT',
+  '🔒 国内服务': 'DIRECT',
+  '📲 电报消息': '🚀 节点选择',
+  '🐱 Github': '🚀 节点选择',
+  'Ⓜ️ 微软服务': '⚡ 自动选择',
+  '🍏 苹果服务': 'DIRECT',
+  '🌐 社交媒体': '🇺🇸 美国',
+  '🎬 流媒体': '🚀 节点选择',
+  '🎮 游戏平台': '🚀 节点选择',
+  '📚 教育资源': '⚡ 自动选择',
+  '💰 金融服务': '🇺🇸 美国',
+  '💹 交易所': '🇯🇵 日本',
+  '☁️ 云服务': '🇺🇸 美国',
+  '🌐 非中国': '🚀 节点选择',
+  '🐟 漏网之鱼': '🚀 节点选择'
 };
 
-// 策略组生成逻辑已移入 main 函数
-
-// 程序入口
 function main(config) {
   config = config || {};
 
@@ -390,11 +384,10 @@ function main(config) {
     throw new Error("配置文件中未找到任何代理");
   }
 
-  // --- 动态生成节点组 ---
+  // 动态生成节点组
   const hasStaticProxies = allProxies.length > 0;
   const hasProxyProviders = proxyProviderCount > 0;
 
-  // 1. 过滤存在的地区
   const validRegionGroups = [];
   const validRegionNames = [];
 
@@ -414,14 +407,13 @@ function main(config) {
   }
 
   for (const [name, { keywords }] of Object.entries(regionKeywords)) {
-    // 仅使用 proxy-providers 时，无法提前枚举节点名；此时保留地区分组，由 include-all + filter 动态匹配。
+    // 仅使用 proxy-providers 时，由于无法提前枚举节点名，故保留地区分组并使用 include-all + filter 延迟匹配。
     if (!hasStaticProxies && hasProxyProviders) {
       validRegionGroups.push(createRegionGroup(name, keywords));
       validRegionNames.push(name);
       continue;
     }
 
-    // 检查是否有节点匹配该地区的关键字
     const regex = new RegExp(createRegionFilter(keywords), "i");
     if (!allProxies.some(p => regex.test(getProxyName(p)))) {
       continue;
@@ -429,7 +421,7 @@ function main(config) {
 
     let defaultName;
 
-    // 为美国节点组设置默认节点(优先选择VMISS)
+    // 优先匹配美国 VMISS 落地节点
     if (name === "🇺🇸 美国") {
       const vmissNode = allProxies.find(p =>
         regex.test(getProxyName(p)) && getProxyName(p).toUpperCase().includes("VMISS")
@@ -443,13 +435,11 @@ function main(config) {
     validRegionNames.push(name);
   }
 
-  // 2. 生成 ruleGroupProxies (动态)
   const dynamicRuleGroupProxies = ['🚀 节点选择', 'DIRECT', '⚡ 自动选择', ...validRegionNames];
 
-  // 3. 生成 otherRuleGroups (动态)
   const dynamicOtherRuleGroups = ruleGroupNames.map(name => {
     let defaultProxy = ruleGroupDefaults[name] || '🚀 节点选择';
-    // 如果默认节点是地区组，且该地区组不存在，则降级为 '🚀 节点选择'
+    // 若默认偏好地区组当前节点池并不匹配，则安全降级
     if (regionKeywords[defaultProxy] && !validRegionNames.includes(defaultProxy)) {
       defaultProxy = '🚀 节点选择';
     }
@@ -462,13 +452,12 @@ function main(config) {
     };
   });
 
-  // 4. 组装基础 proxyGroups
   const baseProxyGroups = [
     {
       "type": "select",
       "name": "🚀 节点选择",
       "proxies": ["DIRECT", "REJECT", "⚡ 自动选择"],
-      "include-all": true // 自动包含所有代理节点
+      "include-all": true
     },
     {
       "name": "⚡ 自动选择",
@@ -476,9 +465,9 @@ function main(config) {
       "url": "https://www.gstatic.com/generate_204",
       "interval": 300,
       "lazy": false,
-      "include-all": true // 自动包含所有代理节点
+      "include-all": true
     },
-    ...validRegionGroups, // 添加有效的地区分组实体
+    ...validRegionGroups,
     {
       "type": "select",
       "name": "🛑 广告拦截",
@@ -487,7 +476,7 @@ function main(config) {
     ...dynamicOtherRuleGroups
   ];
 
-  // --- 基于 dialer-proxy 的精简版链式代理生成 ---
+  // 链式代理生成 (基于 dialer-proxy)
   const originalProxies = allProxies;
   const chainProxyRegex = createOptionalRegex(userScriptOptions.chainProxyNamePattern);
   const chainCandidateProxies = originalProxies.filter(proxy => getProxyName(proxy));
@@ -508,88 +497,68 @@ function main(config) {
   }
 
   if (canBuildChainProxy) {
-    // 1. 仅为出口节点创建带有拨号代理的克隆 (入口直接复用原节点)
-    const level2Proxies = [];  // 出口节点
+    const level2Proxies = [];
 
     chainSourceProxies.forEach(proxy => {
-      // 出口节点,通过 ⛓️ 入口节点 中转
       const l2Proxy = { ...proxy };
       l2Proxy.name = `${getProxyName(proxy)} ↘️`;
       l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
       level2Proxies.push(l2Proxy);
     });
 
-    // 将链式出口节点添加到配置中 (不再添加 ↗️ 入口节点)
     config.proxies = [...originalProxies, ...level2Proxies];
   }
 
-  // 2. 为所有使用 include-all 的基础代理组添加 filter,排除链式节点
   const excludeChainFilter = '^(?!.*(↘️)).*$';
   baseProxyGroups.forEach(group => {
     if (group['include-all'] && !group.filter) {
-      // 如果已有 include-all 但没有 filter,添加排除链式节点的 filter
       group.filter = excludeChainFilter;
     } else if (group['include-all'] && group.filter) {
-      // 如果已有 filter,需要同时满足原 filter 和排除链式节点
-      // 使用 combineFilters() 避免将原 filter 直接嵌入 lookahead，
-      // 防止原 filter 内的 ^ / $ 锚点在 lookahead 上下文中失效
+      // 避免原 filter 直接嵌入 lookahead，防范其内部的 ^ / $ 在此失效
       group.filter = combineFilters(group.filter, excludeChainFilter);
     }
   });
 
-  // 3. 组装最终的代理组列表
   const finalProxyGroups = [...baseProxyGroups];
 
   if (canBuildChainProxy) {
-    // 4. 创建入口节点选择组 (自动吸纳所有不带 ↘️ 的普通节点)
     const chainLevel1Group = {
       name: '⛓️ 入口节点',
       type: 'select',
       'include-all': true,
-      filter: excludeChainFilter, // 只包含常规节点
+      filter: excludeChainFilter,
     };
 
-    // 5. 创建链式代理组 (自动吸纳所有带 ↘️ 的出口节点)
     const chainGroup = {
       name: '⛓️ 链式代理',
       type: 'select',
       'include-all': true,
-      filter: '↘️', // 只包含出口落地节点
+      filter: '↘️',
     };
 
-    finalProxyGroups.push(
-      chainLevel1Group,    // 入口节点选择
-      chainGroup,          // 链式代理落地选择
-    );
+    finalProxyGroups.push(chainLevel1Group, chainGroup);
   }
 
-  // 7. 将"链式代理"添加到主选择器中
   const mainSelector = finalProxyGroups.find(g => g.name === '🚀 节点选择');
   if (canBuildChainProxy && Array.isArray(mainSelector?.proxies) && !mainSelector.proxies.includes('⛓️ 链式代理')) {
-    // 插入到 '⚡ 自动选择' 之后
     mainSelector.proxies.splice(3, 0, '⛓️ 链式代理');
   }
 
-  // 8. 将"链式代理"添加到其他所有策略组中
   finalProxyGroups.forEach(group => {
     if (!canBuildChainProxy) {
       return;
     }
     if (ruleGroupNames.includes(group.name) && Array.isArray(group.proxies) && !group.proxies.includes('⛓️ 链式代理')) {
-      // 使用 Math.min 防止 validRegionNames 为空时 proxies 不足 4 个元素导致插入位置越界
+      // 边界防御：若 validRegionNames 为空，限制位置避免越界
       const insertPos = Math.min(4, group.proxies.length);
       group.proxies.splice(insertPos, 0, '⛓️ 链式代理');
     }
   });
-  // --- 结束二级链式代理生成 ---
 
-  // 合并 DNS 配置
+  // 配置数据合并与下发
   config.dns = mergeDnsConfig(config.dns, dnsConfig);
-
-  // 覆盖 GeoIP/Geosite 相关配置
   Object.assign(config, geoConfig);
 
-  // 合并规则集、代理组和规则，保留原订阅中的自定义内容
   config["rule-providers"] = { ...(config["rule-providers"] || {}), ...ruleProviders };
   config["proxy-groups"] = mergeProxyGroups(config["proxy-groups"], finalProxyGroups);
   config.rules = mergeRules(config.rules, rules);
@@ -599,6 +568,5 @@ function main(config) {
     config["x-script-warnings"] = uniqueList([...existingWarnings, ...scriptWarnings]);
   }
 
-  // 返回修改后的配置
   return config;
 }
