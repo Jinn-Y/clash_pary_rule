@@ -1,4 +1,5 @@
 const rules = [
+  "DOMAIN-SUFFIX,jinnll.cc,DIRECT",
   "DOMAIN,msmp.abchina.com.cn,REJECT",
   "DOMAIN,yunbusiness.ccb.com,DIRECT",
   "DOMAIN,wxh.wo.cn,DIRECT",
