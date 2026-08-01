@@ -18,8 +18,8 @@ const rules = [
   "DOMAIN-SUFFIX,jinnll.xyz,🚀 节点选择",
   "DOMAIN-SUFFIX,weajp.com,DIRECT",
   "DOMAIN-SUFFIX,starboss.biz,DIRECT",
-  "RULE-SET,amazon,DIRECT",
-  "RULE-SET,aws,DIRECT",
+  "RULE-SET,amazon,🇺🇸 美国",
+  "RULE-SET,aws,🇺🇸 美国",
   "DOMAIN-KEYWORD,starpay,DIRECT",
   "DOMAIN-KEYWORD,atlassian,DIRECT",
 
