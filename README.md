@@ -1,206 +1,148 @@
 # clash_pary_rule
 
-一个用于 `Clash / Clash.Meta / Mihomo` 的 JavaScript 配置覆写脚本。
+用于 Clash.Meta / Mihomo 的 JavaScript 配置覆写脚本。脚本在保留原订阅配置的基础上，补充分流规则、远程规则集、DNS、Geo 数据源、地区策略组和二级链式代理。
 
-它会在导入原始订阅配置后，对配置进行二次加工，自动生成更适合日常使用的规则、策略组、DNS 配置和链式代理能力。
+> 项目名中的 `pary` 是仓库现有命名；核心脚本为 [`clash_party_rule.js`](./clash_party_rule.js)。
 
-## 这是什么
+## 当前分支与 `default` 分支的区别
 
-仓库核心文件是 [`clash_party_rule.js`](/D:/CODE/clash_pary_rule/clash_party_rule.js)。
+两个分支只有 Amazon / AWS 的分流策略不同，其余脚本逻辑一致：
 
-该脚本通过 `main(config)` 接收 Clash 当前配置对象，并在返回前统一覆盖以下内容：
+| 规则集 | 当前分支（`work`，与 `main` 一致） | `default` 分支 |
+| --- | --- | --- |
+| `amazon` | `DIRECT` | `🇺🇸 美国` |
+| `aws` | `DIRECT` | `🇺🇸 美国` |
 
-- `rules`：流量分流规则
-- `rule-providers`：远程规则集
-- `proxy-groups`：策略组
-- `dns`：DNS 配置
-- `geo` 相关设置：GeoIP / Geosite 数据源与自动更新
+- 当前分支让 Amazon 和 AWS 流量直连，适合本地网络可正常访问、且不希望云服务绕行代理的场景。
+- `default` 分支固定使用 `🇺🇸 美国` 策略组，适合需要美国出口 IP 的场景。使用该分支时，应确保订阅中存在能被脚本识别的美国节点。
 
-适合这样的场景：
+切换分支：
 
-- 你已经有订阅链接，但默认策略组太乱
-- 你想按服务类型自动分流，比如 AI、Google、Github、流媒体、游戏、金融服务
-- 你希望根据节点名称自动生成地区组
-- 你想在 Clash 中直接使用链式代理
+```bash
+# Amazon / AWS 直连
+git switch main
 
-## 主要功能
-
-### 1. 统一分流规则
-
-脚本内置了一套常用分流规则，会把流量按服务类别送入不同策略组，例如：
-
-- AI 服务
-- Google 服务
-- Github / Gitlab
-- 微软 / 苹果服务
-- 社交媒体
-- 流媒体
-- 游戏平台
-- 教育资源
-- 金融服务
-- 国内服务
-- 广告拦截
-
-同时还包含一些针对特定应用或站点的直连 / 拒绝规则，以及少量个人工作相关规则。
-
-### 2. 自动加载远程规则集
-
-脚本会自动配置 `rule-providers`，从远程拉取常见规则集，例如：
-
-- `category-ai-!cn`
-- `google`
-- `github`
-- `telegram`
-- `youtube`
-- `netflix`
-- `cn`
-- `private`
-
-这些规则集主要来自 `MetaCubeX/meta-rules-dat`。
-
-### 3. 自动生成地区节点组
-
-脚本会扫描订阅中的节点名称，根据关键词自动生成地区策略组，例如：
-
-- 香港
-- 台湾
-- 日本
-- 美国
-- 新加坡
-- 韩国
-- 英国
-- 德国
-
-如果某个地区在当前订阅里没有匹配到节点，就不会创建这个地区组。
-
-### 4. 自动生成业务策略组
-
-脚本会生成一套业务策略组，并为不同类型服务设置默认策略，例如：
-
-- `💬 AI 服务`
-- `🔍 谷歌服务`
-- `🐱 Github`
-- `🎬 流媒体`
-- `🎮 游戏平台`
-- `💰 金融服务`
-- `🐟 漏网之鱼`
-
-这些策略组默认会包含：
-
-- `🚀 节点选择`
-- `DIRECT`
-- `REJECT`
-- `⚡ 自动选择`
-- 已识别出的地区组
-- `⛓️ 链式代理`
-
-### 5. 内置 DNS 优化
-
-脚本会覆盖 Clash 的 DNS 配置，特点包括：
-
-- 开启 `fake-ip`
-- 开启 `respect-rules`
-- 国内 / 私有网络优先走国内 DNS
-- 非中国站点优先走海外 DNS
-
-这能减少 DNS 污染和分流不准的问题。
-
-### 6. 支持二级链式代理
-
-这是这个脚本比较特别的能力。
-
-它会把每个原始节点自动复制成两类节点：
-
-- `↗️`：入口节点
-- `↘️`：出口节点
-
-然后通过 `dialer-proxy` 生成：
-
-- `⛓️ 入口节点`
-- `⛓️ 出口节点`
-- `⛓️ 链式代理`
-
-这样你就可以在 Clash 中实现“先走一个入口节点，再通过另一个出口节点出站”的二级链式代理组合。
-
-## 使用方式
-
-### 方式一：作为覆写脚本使用
-
-适用于支持 JavaScript 配置覆写的 Clash / Mihomo 客户端。
-
-基本思路是：
-
-1. 先导入你的机场订阅或原始配置
-2. 将 [`clash_party_rule.js`](/D:/CODE/clash_pary_rule/clash_party_rule.js) 配置为覆写脚本
-3. 让客户端在加载配置时执行该脚本
-4. 使用脚本生成后的策略组进行分流
-
-不同客户端的入口名称可能不同，常见叫法包括：
-
-- `脚本`
-- `配置覆写`
-- `覆写脚本`
-- `Script`
-- `JavaScript Config Processor`
-
-如果你的客户端支持“远程脚本”或“本地脚本”，都可以使用本仓库中的这个文件。
-
-### 方式二：直接集成到支持 `main(config)` 的脚本处理链
-
-如果你本来就在维护一套 Mihomo JS 配置处理脚本，也可以把这个文件作为独立模块使用。
-
-脚本要求输入配置中至少存在以下之一：
-
-- `proxies`
-- `proxy-providers`
-
-如果两者都不存在，脚本会报错：
-
-```js
-throw new Error("配置文件中未找到任何代理");
+# Amazon / AWS 使用美国节点
+git switch default
 ```
 
-## 使用前提
+## 功能概览
 
-为了正常工作，建议满足以下条件：
+### 规则分流
 
-- 使用支持 JavaScript 配置覆写的 Clash Meta / Mihomo 内核或客户端
-- 原始配置里包含节点信息
-- 客户端允许访问远程规则集和 Geo 数据源
-- 节点命名中最好带有地区关键词，如 `HK`、`JP`、`US`、`Singapore`
+内置 AI、Google、GitHub、微软、苹果、社交媒体、流媒体、游戏平台、教育资源、金融服务、交易所、云服务、国内服务、广告拦截等策略，并以 `MATCH,🐟 漏网之鱼` 兜底。
 
-如果节点名称不包含地区信息，自动地区分组的效果会变差。
+大部分规则集来自 [`MetaCubeX/meta-rules-dat`](https://github.com/MetaCubeX/meta-rules-dat)，脚本会生成相应的 `rule-providers` 配置。
 
-## 使用效果
+### 地区策略组
 
-加载脚本后，配置通常会出现这些变化：
+脚本根据节点名称识别香港、台湾、日本、美国、新加坡、韩国、英国、德国等 20 个地区。
 
-- 原有 `dns` 被统一替换
-- 原有 `rule-providers` 被统一替换
-- 原有 `proxy-groups` 被统一替换
-- 原有 `rules` 被统一替换
-- 新增地区组、业务组和链式代理组
+- 配置含静态 `proxies` 时，只创建实际匹配到节点的地区组。
+- 配置仅含 `proxy-providers` 时，无法预先枚举节点，因此保留全部地区组，并通过 `include-all` 和正则表达式在运行时筛选。
+- 业务组偏好的地区不存在时，自动回退到 `🚀 节点选择`。
+- 美国组会优先选择名称中包含 `VMISS` 的匹配节点。
 
-也就是说，这个脚本更接近“整套策略模板”，而不是只补几条规则。
+### 业务策略组
 
-## 自定义建议
+脚本会生成 `🚀 节点选择`、`⚡ 自动选择`、`🛑 广告拦截` 以及各业务策略组。自动选择组使用 `https://www.gstatic.com/generate_204` 测速，间隔为 300 秒。
 
-如果你要按自己的需求调整，优先看这几个部分：
+### DNS 与 Geo 数据
 
-- `rules`：修改分流目标
-- `regionKeywords`：调整地区识别关键词
-- `ruleGroupNames`：调整生成哪些业务组
-- `ruleGroupDefaults`：调整每个业务组的默认策略
-- `dnsConfig`：修改 DNS 服务器
-- `ruleProviders`：增删远程规则集
+- 启用 `fake-ip`、IPv6 和 `respect-rules`。
+- 国内及私有域名使用腾讯、阿里 DoH。
+- 非中国域名使用 Cloudflare、Google DoH。
+- 启用 GeoIP / Geosite 自动更新，更新间隔为 24 小时。
 
-## 已知特点
+### 二级链式代理
 
-- 脚本会覆盖原配置中的同名字段，不是“合并追加”
-- 链式代理会额外复制节点，节点数量较多时策略组会明显变大
-- 部分规则包含个人使用场景，例如工作域名直连，可按需删除
+存在静态节点时，脚本会为符合条件的原始节点生成带 `↘️` 后缀的出口副本，并通过 `dialer-proxy` 连接到 `⛓️ 入口节点`，最终组成 `⛓️ 链式代理`。
 
-## 文件说明
+链路关系如下：
 
-- [`clash_party_rule.js`](/D:/CODE/clash_pary_rule/clash_party_rule.js)：主脚本
-- [`README.md`](/D:/CODE/clash_pary_rule/README.md)：项目说明
+```text
+应用流量 -> 出口节点（↘️） -> ⛓️ 入口节点 -> 目标网络
+```
+
+为避免节点过多导致配置膨胀，默认仅在候选节点不超过 80 个时生成链式代理。仅使用 `proxy-providers` 的配置不会生成链式代理。
+
+## 使用方法
+
+1. 在支持 JavaScript 配置覆写的 Clash.Meta / Mihomo 客户端中导入原始订阅。
+2. 将 [`clash_party_rule.js`](./clash_party_rule.js) 添加为本地或远程覆写脚本。
+3. 重新加载配置，确认生成的策略组和规则集可用。
+4. 按需选择 `🚀 节点选择` 或各业务策略组的出口。
+
+客户端中的入口可能叫“脚本”“配置覆写”“覆写脚本”或 “JavaScript Config Processor”。脚本入口函数为：
+
+```js
+main(config)
+```
+
+输入配置必须至少包含非空的 `proxies` 或 `proxy-providers`，否则脚本会抛出 `配置文件中未找到任何代理`。
+
+## 脚本选项
+
+可在原始配置中通过 `x-script-options` 控制链式代理：
+
+```yaml
+x-script-options:
+  enableChainProxy: true
+  maxChainProxyCount: 80
+  chainProxyNamePattern: "US|美国|VMISS"
+```
+
+| 选项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `enableChainProxy` | `true` | 是否生成链式代理 |
+| `maxChainProxyCount` | `80` | 候选节点上限；超过后跳过生成 |
+| `chainProxyNamePattern` | `""` | 用 JavaScript 正则筛选参与链式代理的节点；空字符串表示不过滤 |
+
+正则无效时会被忽略。候选节点超过上限时，原因会写入返回配置的 `x-script-warnings`。
+
+## 配置合并行为
+
+脚本不是简单替换整个订阅，具体行为如下：
+
+| 配置项 | 行为 |
+| --- | --- |
+| `dns` | 保留原有字段，再以脚本配置覆盖同名字段；`nameserver-policy` 单独合并 |
+| `rule-providers` | 保留原有规则集，脚本内同名规则集优先 |
+| `proxy-groups` | 保留原有组；同名组合并，节点列表去重 |
+| `rules` | 原规则在前、脚本规则在后并去重；最终只保留一个 `MATCH` 规则 |
+| Geo 配置 | 脚本配置覆盖同名字段 |
+| `proxies` | 仅在启用链式代理时追加出口节点副本 |
+
+由于原有规则排在脚本规则之前，原配置中的同类规则可能优先命中。修改分流行为时，先检查原订阅已有规则，别把规则顺序当摆设。
+
+## 常见问题
+
+### 地区组为空或缺失
+
+节点名称必须包含可识别的地区关键词，例如 `HK`、`JP`、`US`、`Singapore`。静态节点没有匹配项时，对应地区组不会创建。
+
+### 没有生成链式代理
+
+依次检查：
+
+1. 是否存在静态 `proxies`；
+2. `enableChainProxy` 是否为 `true`；
+3. `chainProxyNamePattern` 是否能匹配节点名称；
+4. 候选节点数是否超过 `maxChainProxyCount`。
+
+### 远程规则集无法下载
+
+确认客户端能够访问 GitHub Raw，且 Mihomo 内核版本支持 `mrs` 格式规则集。
+
+## 自定义入口
+
+常见修改位置都在 [`clash_party_rule.js`](./clash_party_rule.js)：
+
+- `rules`：分流规则及顺序
+- `dnsConfig`：DNS 行为
+- `ruleProviders`：远程规则集
+- `regionKeywords`：地区识别
+- `ruleGroupNames` / `ruleGroupDefaults`：业务组及默认策略
+- `defaultScriptOptions`：链式代理默认参数
+
+修改前先弄清规则优先级和策略组引用关系。能运行不等于配置正确。
