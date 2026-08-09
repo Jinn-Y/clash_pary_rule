@@ -23,6 +23,8 @@ const rules = [
   "DOMAIN-KEYWORD,starpay,DIRECT",
   "DOMAIN-KEYWORD,atlassian,DIRECT",
 
+  "DOMAIN-SUFFIX,turingfraud.net,💹 交易所",
+  "DOMAIN,firebaseinstallations.googleapis.com,💹 交易所",
   "RULE-SET,category-ads-all,🛑 广告拦截",
   "RULE-SET,talkatone-ads,🛑 广告拦截",
   "RULE-SET,category-bank-cn,DIRECT",
