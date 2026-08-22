@@ -77,6 +77,14 @@ const rules = [
   "MATCH,🐟 漏网之鱼"
 ];
 
+// GitHub 在部分国内网络中会间歇性不可达；所有 GitHub 规则与 Geo 数据统一经此代理下载。
+// 如需使用自建代理，只修改此前缀，末尾必须保留 `/`。
+const githubProxyPrefix = "https://gh-proxy.com/";
+
+function githubProxyUrl(url) {
+  return `${githubProxyPrefix}${url}`;
+}
+
 const dnsConfig = {
   "enable": true,
   "ipv6": true,
@@ -109,10 +117,10 @@ const geoConfig = {
   "geodata-loader": "standard",
   "geo-update-interval": 24,
   "geox-url": {
-    "geoip": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat",
-    "geosite": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat",
-    "mmdb": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb",
-    "asn": "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb"
+    "geoip": githubProxyUrl("https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat"),
+    "geosite": githubProxyUrl("https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat"),
+    "mmdb": githubProxyUrl("https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb"),
+    "asn": githubProxyUrl("https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb")
   }
 };
 
@@ -130,7 +138,7 @@ const ruleProviderCommon = {
 };
 
 function metaRulesDatUrl(type, name) {
-  return `https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/${type}/${name}.mrs`;
+  return githubProxyUrl(`https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/${type}/${name}.mrs`);
 }
 
 function metaRulesDatProvider(type, name, behavior) {
@@ -145,7 +153,7 @@ function metaRulesDatProvider(type, name, behavior) {
 // 规则集配置
 const ruleProviders = {
   "category-ads-all": metaRulesDatProvider("geosite", "category-ads-all", "domain"),
-  "talkatone-ads": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/TalkatoneAntiAds.list", "path": "./ruleset/talkatone-ads.list" },
+  "talkatone-ads": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": githubProxyUrl("https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/TalkatoneAntiAds.list"), "path": "./ruleset/talkatone-ads.list" },
   "category-ai-!cn": metaRulesDatProvider("geosite", "category-ai-!cn", "domain"),
   "bilibili": metaRulesDatProvider("geosite", "bilibili", "domain"),
   "youtube": metaRulesDatProvider("geosite", "youtube", "domain"),
@@ -183,7 +191,7 @@ const ruleProviders = {
   "mastercard": metaRulesDatProvider("geosite", "mastercard", "domain"),
   "stripe": metaRulesDatProvider("geosite", "stripe", "domain"),
   "wise": metaRulesDatProvider("geosite", "wise", "domain"),
-  "crypto": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt", "path": "./ruleset/crypto.txt" },
+  "crypto": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": githubProxyUrl("https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt"), "path": "./ruleset/crypto.txt" },
   "aws": metaRulesDatProvider("geosite", "aws", "domain"),
   "azure": metaRulesDatProvider("geosite", "azure", "domain"),
   "digitalocean": metaRulesDatProvider("geosite", "digitalocean", "domain"),

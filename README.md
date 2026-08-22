@@ -132,7 +132,12 @@ x-script-options:
 
 ### 远程规则集无法下载
 
-确认客户端能够访问 GitHub Raw，且 Mihomo 内核版本支持 `mrs` 格式规则集。
+脚本已将所有 GitHub Raw、Release 与 Geo 数据 URL 改写为 `https://gh-proxy.com/<原始 GitHub URL>`，用于规避部分国内网络对 GitHub 的间歇性阻断；无需额外设置代理组。
+
+- 代理前缀集中在 `clash_party_rule.js` 的 `githubProxyPrefix`。若你有自建 GitHub 代理，替换该值即可，且末尾必须保留 `/`。
+- 这是第三方转发服务，能看到下载请求；不要用它下载私有仓库或任何带令牌的 URL。需要更强的可信度时应使用自建代理。
+- 若规则仍无法更新，先在浏览器访问 `https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs`，再检查客户端日志。
+- Mihomo 内核仍须支持 `mrs` 格式规则集。
 
 ## 自定义入口
 
