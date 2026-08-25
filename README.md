@@ -56,15 +56,17 @@ git switch default
 
 ### 二级链式代理
 
-存在静态节点时，脚本会为符合条件的原始节点生成带 `↘️` 后缀的出口副本，并通过 `dialer-proxy` 连接到 `⛓️ 入口节点`，最终组成 `⛓️ 链式代理`。
+存在静态节点时，脚本会为符合条件的原始节点生成以 `⛓️出口 :: ` 开头的出口副本，并通过 `dialer-proxy` 连接到 `⛓️ 入口节点`，最终组成 `⛓️ 链式代理`。
 
 链路关系如下：
 
 ```text
-应用流量 -> 出口节点（↘️） -> ⛓️ 入口节点 -> 目标网络
+应用流量 -> 出口节点（⛓️出口） -> ⛓️ 入口节点 -> 目标网络
 ```
 
-为避免节点过多导致配置膨胀，默认仅在候选节点不超过 80 个时生成链式代理。仅使用 `proxy-providers` 的配置不会生成链式代理。
+为避免节点过多导致配置膨胀，默认仅在候选节点不超过 80 个时生成链式代理。脚本会清理自身上一次生成的出口副本，因此重复执行不会叠加生成节点；若出口名称冲突则跳过并写入警告。仅使用 `proxy-providers` 的配置不会生成链式代理。
+
+Hysteria、Hysteria2、TUIC、WireGuard、ShadowTLS 及带 Reality 配置的节点不会被用作链式出口，以避免不兼容的 UDP 或 TLS 伪装链路；跳过原因会写入 `x-script-warnings`。这些节点仍可作为入口节点或普通节点使用。
 
 ## 使用方法
 
@@ -132,7 +134,12 @@ x-script-options:
 
 ### 远程规则集无法下载
 
-确认客户端能够访问 GitHub Raw，且 Mihomo 内核版本支持 `mrs` 格式规则集。
+脚本已将所有 GitHub Raw、Release 与 Geo 数据 URL 改写为 `https://gh-proxy.com/<原始 GitHub URL>`，用于规避部分国内网络对 GitHub 的间歇性阻断；无需额外设置代理组。
+
+- 代理前缀集中在 `clash_party_rule.js` 的 `githubProxyPrefix`。若你有自建 GitHub 代理，替换该值即可，且末尾必须保留 `/`。
+- 这是第三方转发服务，能看到下载请求；不要用它下载私有仓库或任何带令牌的 URL。需要更强的可信度时应使用自建代理。
+- 若规则仍无法更新，先在浏览器访问 `https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs`，再检查客户端日志。
+- Mihomo 内核仍须支持 `mrs` 格式规则集。
 
 ## 自定义入口
 

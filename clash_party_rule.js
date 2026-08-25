@@ -18,11 +18,13 @@ const rules = [
   "DOMAIN-SUFFIX,jinnll.xyz,🚀 节点选择",
   "DOMAIN-SUFFIX,weajp.com,DIRECT",
   "DOMAIN-SUFFIX,starboss.biz,DIRECT",
-  "RULE-SET,amazon,DIRECT",
-  "RULE-SET,aws,DIRECT",
+  "RULE-SET,amazon,🇺🇸 美国",
+  "RULE-SET,aws,🇺🇸 美国",
   "DOMAIN-KEYWORD,starpay,DIRECT",
   "DOMAIN-KEYWORD,atlassian,DIRECT",
 
+  "DOMAIN-SUFFIX,turingfraud.net,💹 交易所",
+  "DOMAIN,firebaseinstallations.googleapis.com,💹 交易所",
   "RULE-SET,category-ads-all,🛑 广告拦截",
   "RULE-SET,talkatone-ads,🛑 广告拦截",
   "RULE-SET,category-bank-cn,DIRECT",
@@ -75,6 +77,14 @@ const rules = [
   "MATCH,🐟 漏网之鱼"
 ];
 
+// GitHub 在部分国内网络中会间歇性不可达；所有 GitHub 规则与 Geo 数据统一经此代理下载。
+// 如需使用自建代理，只修改此前缀，末尾必须保留 `/`。
+const githubProxyPrefix = "https://gh-proxy.com/";
+
+function githubProxyUrl(url) {
+  return `${githubProxyPrefix}${url}`;
+}
+
 const dnsConfig = {
   "enable": true,
   "ipv6": true,
@@ -107,10 +117,10 @@ const geoConfig = {
   "geodata-loader": "standard",
   "geo-update-interval": 24,
   "geox-url": {
-    "geoip": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat",
-    "geosite": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat",
-    "mmdb": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb",
-    "asn": "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb"
+    "geoip": githubProxyUrl("https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat"),
+    "geosite": githubProxyUrl("https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat"),
+    "mmdb": githubProxyUrl("https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb"),
+    "asn": githubProxyUrl("https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb")
   }
 };
 
@@ -120,6 +130,11 @@ const defaultScriptOptions = {
   chainProxyNamePattern: ""
 };
 
+const chainEntryGroupName = "⛓️ 入口节点";
+const chainExitNamePrefix = "⛓️出口 :: ";
+const legacyChainExitNameSuffix = " ↘️";
+const unsupportedChainExitTypes = new Set(["hysteria", "hysteria2", "tuic", "wireguard", "shadowtls"]);
+
 // 规则集通用配置
 const ruleProviderCommon = {
   "type": "http",
@@ -128,7 +143,7 @@ const ruleProviderCommon = {
 };
 
 function metaRulesDatUrl(type, name) {
-  return `https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/${type}/${name}.mrs`;
+  return githubProxyUrl(`https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/${type}/${name}.mrs`);
 }
 
 function metaRulesDatProvider(type, name, behavior) {
@@ -143,7 +158,7 @@ function metaRulesDatProvider(type, name, behavior) {
 // 规则集配置
 const ruleProviders = {
   "category-ads-all": metaRulesDatProvider("geosite", "category-ads-all", "domain"),
-  "talkatone-ads": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/TalkatoneAntiAds.list", "path": "./ruleset/talkatone-ads.list" },
+  "talkatone-ads": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": githubProxyUrl("https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/TalkatoneAntiAds.list"), "path": "./ruleset/talkatone-ads.list" },
   "category-ai-!cn": metaRulesDatProvider("geosite", "category-ai-!cn", "domain"),
   "bilibili": metaRulesDatProvider("geosite", "bilibili", "domain"),
   "youtube": metaRulesDatProvider("geosite", "youtube", "domain"),
@@ -181,7 +196,7 @@ const ruleProviders = {
   "mastercard": metaRulesDatProvider("geosite", "mastercard", "domain"),
   "stripe": metaRulesDatProvider("geosite", "stripe", "domain"),
   "wise": metaRulesDatProvider("geosite", "wise", "domain"),
-  "crypto": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": "https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt", "path": "./ruleset/crypto.txt" },
+  "crypto": { "type": "http", "behavior": "classical", "format": "text", "interval": 86400, "url": githubProxyUrl("https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt"), "path": "./ruleset/crypto.txt" },
   "aws": metaRulesDatProvider("geosite", "aws", "domain"),
   "azure": metaRulesDatProvider("geosite", "azure", "domain"),
   "digitalocean": metaRulesDatProvider("geosite", "digitalocean", "domain"),
@@ -340,6 +355,38 @@ function getProxyName(proxy) {
   return typeof proxy?.name === "string" ? proxy.name : "";
 }
 
+function isGeneratedChainExit(proxy) {
+  const proxyName = getProxyName(proxy);
+  const isCurrentGeneratedExit = proxyName.startsWith(chainExitNamePrefix);
+  const isLegacyGeneratedExit = proxyName.endsWith(legacyChainExitNameSuffix);
+  return (isCurrentGeneratedExit || isLegacyGeneratedExit) &&
+    proxy?.["dialer-proxy"] === chainEntryGroupName;
+}
+
+function isUnsupportedChainExit(proxy) {
+  const proxyType = typeof proxy?.type === "string" ? proxy.type.toLowerCase() : "";
+  if (unsupportedChainExitTypes.has(proxyType)) {
+    return `协议 ${proxyType || "未知"} 不适合作为链式出口`;
+  }
+
+  if (proxy?.["reality-opts"] || proxy?.reality) {
+    return "Reality 节点不适合作为链式出口";
+  }
+
+  const plugin = typeof proxy?.plugin === "string" ? proxy.plugin.toLowerCase() : "";
+  if (plugin.includes("shadow-tls") || plugin.includes("shadowtls") || proxy?.["shadow-tls"]) {
+    return "ShadowTLS 节点不适合作为链式出口";
+  }
+
+  return null;
+}
+
+function createExactNameFilter(names, exclude = false) {
+  const alternatives = names.map(escapeRegexValue).join("|");
+  const exactMatch = `(?:${alternatives})`;
+  return exclude ? `^(?!${exactMatch}$).*$` : `^${exactMatch}$`;
+}
+
 const ruleGroupNames = [
   '💬 AI 服务', '📺 哔哩哔哩', '📹 油管视频', '🔍 谷歌服务', '🏠 私有网络',
   '🔒 国内服务', '📲 电报消息', '🐱 Github', 'Ⓜ️ 微软服务', '🍏 苹果服务',
@@ -476,12 +523,38 @@ function main(config) {
   ];
 
   // 链式代理生成 (基于 dialer-proxy)
-  const originalProxies = allProxies;
+  // 去除本脚本旧版本生成的出口副本，保证配置覆写可重复执行。
+  const originalProxies = allProxies.filter(proxy => !isGeneratedChainExit(proxy));
   const chainProxyRegex = createOptionalRegex(userScriptOptions.chainProxyNamePattern);
+  const existingProxyNames = new Set(originalProxies.map(getProxyName).filter(Boolean));
   const chainCandidateProxies = originalProxies.filter(proxy => getProxyName(proxy));
-  const chainSourceProxies = chainProxyRegex
-    ? chainCandidateProxies.filter(proxy => chainProxyRegex.test(getProxyName(proxy)))
-    : chainCandidateProxies;
+  const chainSourceProxies = [];
+
+  chainCandidateProxies.forEach(proxy => {
+    const proxyName = getProxyName(proxy);
+    if (proxyName.startsWith(chainExitNamePrefix)) {
+      scriptWarnings.push(`跳过链式出口「${proxyName}」：名称使用链式出口保留前缀`);
+      return;
+    }
+
+    if (chainProxyRegex && !chainProxyRegex.test(proxyName)) {
+      return;
+    }
+
+    const unsupportedReason = isUnsupportedChainExit(proxy);
+    if (unsupportedReason) {
+      scriptWarnings.push(`跳过链式出口「${proxyName}」：${unsupportedReason}`);
+      return;
+    }
+
+    const chainExitName = `${chainExitNamePrefix}${proxyName}`;
+    if (existingProxyNames.has(chainExitName)) {
+      scriptWarnings.push(`跳过链式出口「${proxyName}」：出口名称「${chainExitName}」已存在`);
+      return;
+    }
+
+    chainSourceProxies.push(proxy);
+  });
   const exceedsChainProxyLimit = chainSourceProxies.length > userScriptOptions.maxChainProxyCount;
   const canBuildChainProxy =
     hasStaticProxies &&
@@ -500,29 +573,38 @@ function main(config) {
 
     chainSourceProxies.forEach(proxy => {
       const l2Proxy = { ...proxy };
-      l2Proxy.name = `${getProxyName(proxy)} ↘️`;
-      l2Proxy['dialer-proxy'] = '⛓️ 入口节点';
+      l2Proxy.name = `${chainExitNamePrefix}${getProxyName(proxy)}`;
+      l2Proxy['dialer-proxy'] = chainEntryGroupName;
       level2Proxies.push(l2Proxy);
     });
 
     config.proxies = [...originalProxies, ...level2Proxies];
   }
 
-  const excludeChainFilter = '^(?!.*(↘️)).*$';
-  baseProxyGroups.forEach(group => {
-    if (group['include-all'] && !group.filter) {
-      group.filter = excludeChainFilter;
-    } else if (group['include-all'] && group.filter) {
-      // 避免原 filter 直接嵌入 lookahead，防范其内部的 ^ / $ 在此失效
-      group.filter = combineFilters(group.filter, excludeChainFilter);
-    }
-  });
+  const chainExitNames = canBuildChainProxy
+    ? chainSourceProxies.map(proxy => `${chainExitNamePrefix}${getProxyName(proxy)}`)
+    : [];
+  const chainExitFilter = chainExitNames.length > 0 ? createExactNameFilter(chainExitNames) : null;
+  const excludeChainFilter = chainExitNames.length > 0
+    ? createExactNameFilter(chainExitNames, true)
+    : null;
+
+  if (excludeChainFilter) {
+    baseProxyGroups.forEach(group => {
+      if (group['include-all'] && !group.filter) {
+        group.filter = excludeChainFilter;
+      } else if (group['include-all'] && group.filter) {
+        // 避免原 filter 直接嵌入 lookahead，防范其内部的 ^ / $ 在此失效
+        group.filter = combineFilters(group.filter, excludeChainFilter);
+      }
+    });
+  }
 
   const finalProxyGroups = [...baseProxyGroups];
 
   if (canBuildChainProxy) {
     const chainLevel1Group = {
-      name: '⛓️ 入口节点',
+      name: chainEntryGroupName,
       type: 'select',
       'include-all': true,
       filter: excludeChainFilter,
@@ -532,7 +614,7 @@ function main(config) {
       name: '⛓️ 链式代理',
       type: 'select',
       'include-all': true,
-      filter: '↘️',
+      filter: chainExitFilter,
     };
 
     finalProxyGroups.push(chainLevel1Group, chainGroup);
