@@ -66,7 +66,7 @@ git switch default
 
 为避免节点过多导致配置膨胀，默认仅在候选节点不超过 80 个时生成链式代理。脚本会清理自身上一次生成的出口副本，因此重复执行不会叠加生成节点；若出口名称冲突则跳过并写入警告。仅使用 `proxy-providers` 的配置不会生成链式代理。
 
-Hysteria、Hysteria2、TUIC、WireGuard、ShadowTLS 及带 Reality 配置的节点不会被用作链式出口，以避免不兼容的 UDP 或 TLS 伪装链路；跳过原因会写入 `x-script-warnings`。这些节点仍可作为入口节点或普通节点使用。
+Hysteria、Hysteria2、TUIC、WireGuard、ShadowTLS 不会被用作链式出口，以避免不兼容的 UDP 或 TLS 伪装链路。此脚本默认允许带 Reality 配置的节点作为链式出口，以便当前订阅生成链式代理；若内核或上游链路不兼容，可通过 `enableRealityChainProxy: false` 关闭。跳过原因会写入 `x-script-warnings`。
 
 ## 使用方法
 
@@ -90,6 +90,7 @@ main(config)
 ```yaml
 x-script-options:
   enableChainProxy: true
+  enableRealityChainProxy: true
   maxChainProxyCount: 80
   chainProxyNamePattern: "US|美国|VMISS"
 ```
@@ -97,6 +98,7 @@ x-script-options:
 | 选项 | 默认值 | 说明 |
 | --- | --- | --- |
 | `enableChainProxy` | `true` | 是否生成链式代理 |
+| `enableRealityChainProxy` | `true` | 是否允许带 Reality 配置的节点作为链式出口；不兼容时设为 `false` |
 | `maxChainProxyCount` | `80` | 候选节点上限；超过后跳过生成 |
 | `chainProxyNamePattern` | `""` | 用 JavaScript 正则筛选参与链式代理的节点；空字符串表示不过滤 |
 
@@ -110,12 +112,12 @@ x-script-options:
 | --- | --- |
 | `dns` | 保留原有字段，再以脚本配置覆盖同名字段；`nameserver-policy` 单独合并 |
 | `rule-providers` | 保留原有规则集，脚本内同名规则集优先 |
-| `proxy-groups` | 保留原有组；同名组合并，节点列表去重 |
+| `proxy-groups` | 保留非脚本管理的原有组；脚本管理的同名组以脚本生成的节点、筛选条件和 `include-all` 为准，防止订阅预填节点与动态节点重复 |
 | `rules` | 原规则在前、脚本规则在后并去重；最终只保留一个 `MATCH` 规则 |
 | Geo 配置 | 脚本配置覆盖同名字段 |
 | `proxies` | 仅在启用链式代理时追加出口节点副本 |
 
-由于原有规则排在脚本规则之前，原配置中的同类规则可能优先命中。修改分流行为时，先检查原订阅已有规则，别把规则顺序当摆设。
+由于原有规则排在脚本规则之前，原配置中的同类规则可能优先命中。历史组名 `💱 交易所` 会自动归一为 `💹 交易所`，避免同一业务出现两个策略组。修改分流行为时，先检查原订阅已有规则，别把规则顺序当摆设。
 
 ## 常见问题
 

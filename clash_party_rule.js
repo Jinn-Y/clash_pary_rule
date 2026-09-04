@@ -126,6 +126,8 @@ const geoConfig = {
 
 const defaultScriptOptions = {
   enableChainProxy: true,
+  // 当前订阅全部使用 Reality；关闭此项将不会生成任何链式出口。
+  enableRealityChainProxy: true,
   maxChainProxyCount: 80,
   chainProxyNamePattern: ""
 };
@@ -134,6 +136,9 @@ const chainEntryGroupName = "⛓️ 入口节点";
 const chainExitNamePrefix = "⛓️出口 :: ";
 const legacyChainExitNameSuffix = " ↘️";
 const unsupportedChainExitTypes = new Set(["hysteria", "hysteria2", "tuic", "wireguard", "shadowtls"]);
+const legacyProxyGroupNameAliases = new Map([
+  ["💱 交易所", "💹 交易所"]
+]);
 
 // 规则集通用配置
 const ruleProviderCommon = {
@@ -265,8 +270,48 @@ function combineFilters(left, right) {
   return `^(?=.*(?:${left}))(?=.*(?:${right})).*$`;
 }
 
-function mergeProxyGroup(existingGroup, generatedGroup) {
+function normalizeProxyGroupName(name) {
+  return legacyProxyGroupNameAliases.get(name) || name;
+}
+
+function normalizeRuleGroupAliases(rule) {
+  if (typeof rule !== "string") {
+    return rule;
+  }
+
+  for (const [legacyName, canonicalName] of legacyProxyGroupNameAliases) {
+    const legacyNamePattern = new RegExp(`,${escapeRegexValue(legacyName)}(?=,|$)`, "g");
+    rule = rule.replace(legacyNamePattern, `,${canonicalName}`);
+  }
+  return rule;
+}
+
+function mergeProxyGroup(existingGroup, generatedGroup, generatedOwnsMembership = false) {
   const merged = { ...existingGroup, ...generatedGroup };
+
+  if (generatedOwnsMembership) {
+    // 脚本管理的组不能保留客户端/订阅预填的全量节点：
+    // 否则会与 include-all 或脚本生成的地区组同时出现，造成重复展示。
+    if (Array.isArray(generatedGroup.proxies)) {
+      merged.proxies = uniqueList(generatedGroup.proxies);
+    } else {
+      delete merged.proxies;
+    }
+
+    if (generatedGroup.filter) {
+      merged.filter = generatedGroup.filter;
+    } else {
+      delete merged.filter;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(generatedGroup, "include-all")) {
+      merged["include-all"] = generatedGroup["include-all"];
+    } else {
+      delete merged["include-all"];
+    }
+
+    return merged;
+  }
 
   if (Array.isArray(existingGroup.proxies) && Array.isArray(generatedGroup.proxies)) {
     merged.proxies = uniqueList([...existingGroup.proxies, ...generatedGroup.proxies]);
@@ -287,25 +332,31 @@ function mergeProxyGroups(existingGroups, generatedGroups) {
   const groups = new Map();
   const existing = Array.isArray(existingGroups) ? existingGroups : [];
   const generated = Array.isArray(generatedGroups) ? generatedGroups : [];
+  const generatedGroupNames = new Set(generated.map(group => group?.name).filter(Boolean));
 
   existing.forEach(group => {
     if (group?.name) {
-      groups.set(group.name, group);
+      const normalizedName = normalizeProxyGroupName(group.name);
+      groups.set(normalizedName, normalizedName === group.name ? group : { ...group, name: normalizedName });
     }
   });
   generated.forEach(group => {
     const existingGroup = groups.get(group.name);
-    groups.set(group.name, existingGroup ? mergeProxyGroup(existingGroup, group) : group);
+    groups.set(
+      group.name,
+      existingGroup ? mergeProxyGroup(existingGroup, group, generatedGroupNames.has(group.name)) : group
+    );
   });
   return [...groups.values()];
 }
 
 function mergeRules(existingRules, generatedRules) {
-  const existing = Array.isArray(existingRules) ? existingRules : [];
+  const existing = (Array.isArray(existingRules) ? existingRules : []).map(normalizeRuleGroupAliases);
+  const generated = (Array.isArray(generatedRules) ? generatedRules : []).map(normalizeRuleGroupAliases);
   const existingNonMatch = existing.filter(rule => !String(rule).startsWith("MATCH,"));
   const existingMatch = existing.find(rule => String(rule).startsWith("MATCH,"));
-  const generatedNonMatch = generatedRules.filter(rule => !String(rule).startsWith("MATCH,"));
-  const generatedMatch = generatedRules.find(rule => String(rule).startsWith("MATCH,"));
+  const generatedNonMatch = generated.filter(rule => !String(rule).startsWith("MATCH,"));
+  const generatedMatch = generated.find(rule => String(rule).startsWith("MATCH,"));
   return uniqueList([
     ...existingNonMatch,
     ...generatedNonMatch,
@@ -363,13 +414,13 @@ function isGeneratedChainExit(proxy) {
     proxy?.["dialer-proxy"] === chainEntryGroupName;
 }
 
-function isUnsupportedChainExit(proxy) {
+function isUnsupportedChainExit(proxy, allowRealityChainProxy) {
   const proxyType = typeof proxy?.type === "string" ? proxy.type.toLowerCase() : "";
   if (unsupportedChainExitTypes.has(proxyType)) {
     return `协议 ${proxyType || "未知"} 不适合作为链式出口`;
   }
 
-  if (proxy?.["reality-opts"] || proxy?.reality) {
+  if (!allowRealityChainProxy && (proxy?.["reality-opts"] || proxy?.reality)) {
     return "Reality 节点不适合作为链式出口";
   }
 
@@ -541,7 +592,7 @@ function main(config) {
       return;
     }
 
-    const unsupportedReason = isUnsupportedChainExit(proxy);
+    const unsupportedReason = isUnsupportedChainExit(proxy, userScriptOptions.enableRealityChainProxy === true);
     if (unsupportedReason) {
       scriptWarnings.push(`跳过链式出口「${proxyName}」：${unsupportedReason}`);
       return;
