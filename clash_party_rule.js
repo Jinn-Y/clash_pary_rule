@@ -218,7 +218,7 @@ const ruleProviders = {
 
 // 地区特征正则映射表
 const regionKeywords = {
-  "🇭🇰 香港": { keywords: ["香港", "HK", "Hong Kong", "HKG"] },
+  "🇭🇰 香港": { keywords: ["香港", "HK", "Hong Kong", "HKG", "HKA"] },
   "🇹🇼 台湾": { keywords: ["台湾", "台灣", "TW", "Taiwan", "Taipei"] },
   "🇯🇵 日本": { keywords: ["日本", "东京", "東京", "大阪", "埼玉", "JP", "Japan", "Tokyo", "Osaka", "Saitama"] },
   "🇺🇸 美国": { keywords: ["美国", "美國", "US", "USA", "United States", "America", "Los Angeles", "San Francisco", "Silicon Valley"] },
@@ -247,9 +247,12 @@ function escapeRegexValue(value) {
 function createRegionFilter(keywords) {
   return keywords
     .map(keyword => {
-      const escapedKeyword = escapeRegexValue(keyword);
+      // 筛选字符串由内核运行，不能依赖 JavaScript RegExp 的 i 标志。
+      const escapedKeyword = escapeRegexValue(keyword).replace(/[A-Za-z]/g,
+        letter => `[${letter.toUpperCase()}${letter.toLowerCase()}]`);
       if (/^[A-Za-z0-9]{2,3}$/.test(keyword)) {
-        return `(?:^|[^A-Za-z0-9])${escapedKeyword}(?:$|[^A-Za-z0-9])`;
+        // 接受 US01 / USA01 等编号，但不把 AUS、RUS、DEMO 当作地区缩写。
+        return `(?:^|[^A-Za-z0-9])${escapedKeyword}(?:[0-9]+)?(?:$|[^A-Za-z0-9])`;
       }
       return escapedKeyword;
     })
@@ -493,7 +496,7 @@ function main(config) {
       name,
       type: "select",
       "include-all": true,
-      filter: createRegionFilter(keywords),
+      filter: createRegionFilter([name.split(' ')[0], ...keywords]),
     };
 
     if (defaultName) {
@@ -511,7 +514,7 @@ function main(config) {
       continue;
     }
 
-    const regex = new RegExp(createRegionFilter(keywords), "i");
+    const regex = new RegExp(createRegionFilter([name.split(' ')[0], ...keywords]));
     if (!allProxies.some(p => regex.test(getProxyName(p)))) {
       continue;
     }
