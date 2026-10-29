@@ -134,6 +134,9 @@ const defaultScriptOptions = {
 
 const chainEntryGroupName = "⛓️ 入口节点";
 const chainExitNamePrefix = "⛓️出口 :: ";
+const usChainEntryGroupName = "⛓️ 美国入口节点";
+const usChainExitNamePrefix = "⛓️美国出口 :: ";
+const usChainGroupName = "⛓️ 美国链式代理";
 const legacyChainExitNameSuffix = " ↘️";
 const unsupportedChainExitTypes = new Set(["hysteria", "hysteria2", "tuic", "wireguard", "shadowtls"]);
 const legacyProxyGroupNameAliases = new Map([
@@ -413,6 +416,10 @@ function isGeneratedChainExit(proxy) {
   const proxyName = getProxyName(proxy);
   const isCurrentGeneratedExit = proxyName.startsWith(chainExitNamePrefix);
   const isLegacyGeneratedExit = proxyName.endsWith(legacyChainExitNameSuffix);
+  if (proxyName.startsWith(usChainExitNamePrefix) &&
+      proxy?.["dialer-proxy"] === usChainEntryGroupName) {
+    return true;
+  }
   return (isCurrentGeneratedExit || isLegacyGeneratedExit) &&
     proxy?.["dialer-proxy"] === chainEntryGroupName;
 }
@@ -475,7 +482,8 @@ function main(config) {
 
   const userScriptOptions = resolveScriptOptions(config);
   const scriptWarnings = [];
-  const allProxies = Array.isArray(config.proxies) ? config.proxies : [];
+  const allProxies = (Array.isArray(config.proxies) ? config.proxies : [])
+    .filter(proxy => !isGeneratedChainExit(proxy));
   const proxyProviders = config["proxy-providers"];
   const proxyCount = allProxies.length;
   const proxyProviderCount =
@@ -578,7 +586,7 @@ function main(config) {
 
   // 链式代理生成 (基于 dialer-proxy)
   // 去除本脚本旧版本生成的出口副本，保证配置覆写可重复执行。
-  const originalProxies = allProxies.filter(proxy => !isGeneratedChainExit(proxy));
+  const originalProxies = allProxies;
   const chainProxyRegex = createOptionalRegex(userScriptOptions.chainProxyNamePattern);
   const existingProxyNames = new Set(originalProxies.map(getProxyName).filter(Boolean));
   const chainCandidateProxies = originalProxies.filter(proxy => getProxyName(proxy));
@@ -586,7 +594,7 @@ function main(config) {
 
   chainCandidateProxies.forEach(proxy => {
     const proxyName = getProxyName(proxy);
-    if (proxyName.startsWith(chainExitNamePrefix)) {
+    if (proxyName.startsWith(chainExitNamePrefix) || proxyName.startsWith(usChainExitNamePrefix)) {
       scriptWarnings.push(`跳过链式出口「${proxyName}」：名称使用链式出口保留前缀`);
       return;
     }
@@ -622,6 +630,20 @@ function main(config) {
     );
   }
 
+  const usRegionRegex = new RegExp(createRegionFilter([
+    '🇺🇸', ...regionKeywords['🇺🇸 美国'].keywords
+  ]));
+  const usChainSourceProxies = canBuildChainProxy ? chainSourceProxies.filter(proxy => {
+    const proxyName = getProxyName(proxy);
+    if (!usRegionRegex.test(proxyName)) return false;
+    const exitName = `${usChainExitNamePrefix}${proxyName}`;
+    if (existingProxyNames.has(exitName)) {
+      scriptWarnings.push(`跳过美国链式出口「${proxyName}」：出口名称「${exitName}」已存在`);
+      return false;
+    }
+    return true;
+  }) : [];
+
   if (canBuildChainProxy) {
     const level2Proxies = [];
 
@@ -631,16 +653,27 @@ function main(config) {
       l2Proxy['dialer-proxy'] = chainEntryGroupName;
       level2Proxies.push(l2Proxy);
     });
+    usChainSourceProxies.forEach(proxy => {
+      level2Proxies.push({
+        ...proxy,
+        name: `${usChainExitNamePrefix}${getProxyName(proxy)}`,
+        'dialer-proxy': usChainEntryGroupName,
+      });
+    });
 
     config.proxies = [...originalProxies, ...level2Proxies];
+  } else if (Array.isArray(config.proxies)) {
+    config.proxies = originalProxies;
   }
 
   const chainExitNames = canBuildChainProxy
     ? chainSourceProxies.map(proxy => `${chainExitNamePrefix}${getProxyName(proxy)}`)
     : [];
   const chainExitFilter = chainExitNames.length > 0 ? createExactNameFilter(chainExitNames) : null;
-  const excludeChainFilter = chainExitNames.length > 0
-    ? createExactNameFilter(chainExitNames, true)
+  const usChainExitNames = usChainSourceProxies.map(proxy => `${usChainExitNamePrefix}${getProxyName(proxy)}`);
+  const allChainExitNames = [...chainExitNames, ...usChainExitNames];
+  const excludeChainFilter = allChainExitNames.length > 0
+    ? createExactNameFilter(allChainExitNames, true)
     : null;
 
   if (excludeChainFilter) {
@@ -674,6 +707,25 @@ function main(config) {
     finalProxyGroups.push(chainLevel1Group, chainGroup);
   }
 
+  if (usChainExitNames.length > 0) {
+    finalProxyGroups.push({
+      name: usChainEntryGroupName,
+      type: 'select',
+      'include-all': true,
+      filter: excludeChainFilter,
+    }, {
+      name: usChainGroupName,
+      type: 'select',
+      'include-all': true,
+      filter: createExactNameFilter(usChainExitNames),
+    });
+    const usSelector = finalProxyGroups.find(group => group.name === '🇺🇸 美国');
+    if (!usSelector.default) {
+      usSelector.default = getProxyName(originalProxies.find(proxy => usRegionRegex.test(getProxyName(proxy))));
+    }
+    usSelector.proxies = [usChainGroupName];
+  }
+
   const mainSelector = finalProxyGroups.find(g => g.name === '🚀 节点选择');
   if (canBuildChainProxy && Array.isArray(mainSelector?.proxies) && !mainSelector.proxies.includes('⛓️ 链式代理')) {
     mainSelector.proxies.splice(3, 0, '⛓️ 链式代理');
@@ -695,7 +747,18 @@ function main(config) {
   Object.assign(config, geoConfig);
 
   config["rule-providers"] = { ...(config["rule-providers"] || {}), ...ruleProviders };
-  config["proxy-groups"] = mergeProxyGroups(config["proxy-groups"], finalProxyGroups);
+  // 清理旧链路组，避免关闭链式功能或美国出口消失后留下悬空引用。
+  const managedChainGroups = new Set([
+    chainEntryGroupName, '⛓️ 链式代理', usChainEntryGroupName, usChainGroupName
+  ]);
+  const generatedGroupNames = new Set(finalProxyGroups.map(group => group.name));
+  const obsoleteChainGroups = new Set([...managedChainGroups].filter(name => !generatedGroupNames.has(name)));
+  const existingGroups = (Array.isArray(config["proxy-groups"]) ? config["proxy-groups"] : [])
+    .filter(group => !obsoleteChainGroups.has(group?.name))
+    .map(group => Array.isArray(group?.proxies)
+      ? { ...group, proxies: group.proxies.filter(name => !obsoleteChainGroups.has(name)) }
+      : group);
+  config["proxy-groups"] = mergeProxyGroups(existingGroups, finalProxyGroups);
   config.rules = mergeRules(config.rules, rules);
 
   if (scriptWarnings.length > 0) {
