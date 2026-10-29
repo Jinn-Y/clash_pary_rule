@@ -1,0 +1,1397 @@
+proxies:
+- name: 🇯🇵 JP | GCP
+  type: vless
+  server: 34.104.200.173
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: Mwj5OJMwXO-rtKAVrRigy2dfeKV5Gi3k1QtLTqJV23c
+    short-id: 86aba989
+  network: tcp
+  client-fingerprint: chrome
+  servername: gateway.icloud.com
+- name: 🇭🇰 HK | GCP
+  type: vless
+  server: 34.96.200.136
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: A5ZiSxdmuyz3Dr24Zfy3cQAnbsUPqZSbKNZvL536ZnA
+    short-id: d3a5539dd7
+  network: tcp
+  client-fingerprint: chrome
+  servername: gateway.icloud.com
+- name: 🇸🇬 SG | AWS | 1T | V6
+  type: vless
+  server: 2406:da18:1639:cd00:84e2:ca3c:18bb:8b49
+  port: 5498
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: sjC-yuz96fVtCQNf8SmocQBGxjXIq9ZZVHmvEyMdOQ8
+    short-id: 4cc1516d
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+- name: 🇯🇵 JP | IPLC | AWS
+  type: mieru
+  server: 120.253.251.131
+  port: 14599
+  username: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  password: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  transport: TCP
+  udp: true
+- name: 🇭🇰 HK | GCE
+  type: ss
+  server: 34.96.200.136
+  port: 18790
+  cipher: 2022-blake3-aes-256-gcm
+  password: N2FhODllZDQyZWI2MTg2MTNhMWUxYjM5ZTA1M2M0ODM=:NWYxNTE4MGYtNTI1OC00OWZmLWEwNTMtMWEyM2JhMmU=
+  udp: true
+- name: 🇸🇬 SG | GCE
+  type: vless
+  server: 34.142.226.19
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: B_PBeTMK1AwvZ1LL8iOGI9qiN0k8Z8SfzW8oC08DVAs
+    short-id: 3c94c44158f654f4
+  client-fingerprint: ios
+  network: tcp
+  servername: gateway.icloud.com
+- name: 🇹🇼 TW | GCP
+  type: vless
+  server: 34.80.89.240
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: m2OlAnSnGHBcER2REgyqYl4fy0jGimV8U-d2AeBc2RE
+    short-id: c52903
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+- name: 🇺🇸 US | VMISS | OUT
+  type: vless
+  server: 38.47.115.211
+  port: 17952
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: oi8NllRekfwJu22DZpiUOrPawOZ5rGFuaqq39JLeWHw
+    short-id: c7bbbd67ce147fcd
+  network: tcp
+  client-fingerprint: chrome
+  servername: gateway.icloud.com
+- name: 🇺🇸 US | VMISS
+  type: vless
+  server: 38.47.115.211
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: zcUqdt5pI0kQjOcrNB2sgKYJQ8iHnVf2zTH88iMtvzE
+    short-id: 0128
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+- name: 🇺🇸 US | BWG | VMISS
+  type: vless
+  server: 67.230.182.67
+  port: 17953
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: zcUqdt5pI0kQjOcrNB2sgKYJQ8iHnVf2zTH88iMtvzE
+    short-id: 0128
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+- name: 🇺🇸 US | BWG
+  type: vless
+  server: 67.230.182.67
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: _1eN6CKc5RTMSSyVsXnkGETSpWT1ifLExAdEQmFKejM
+    short-id: d267b840005c
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+- name: 🇸🇬 SG | AWS
+  server: 52.221.73.129
+  port: 4433
+  sni: sgaws8710.251123.xyz
+  up: 500
+  down: 500
+  skip-cert-verify: false
+  type: hysteria2
+  password: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  udp: true
+- name: 🇯🇵 JP | AWS
+  type: vless
+  server: 35.72.108.191
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: zWen601GXqDcD_9bXwTnHCN-Ww9-xG1AvOKZxUWQfCs
+    short-id: 2e5bb4051f124b33
+  client-fingerprint: chrome
+  network: tcp
+  servername: www.yahoo.co.jp
+- name: 🇭🇰 HKA05 | IEPL
+  server: 36.141.40.13
+  port: 1815
+  type: ss
+  cipher: aes-256-gcm
+  password: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  udp: true
+- name: 🇭🇰 HKA09 | IEPL
+  server: 36.141.40.13
+  port: 15268
+  type: vmess
+  uuid: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  udp: true
+  network: tcp
+- name: 🇭🇰 HKA10 | IEPL
+  server: 36.141.40.13
+  port: 13486
+  type: vmess
+  uuid: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: speedtest-bgp-01-10.entry-0.chinasnow.net
+  udp: true
+- name: 🇺🇸 USA01 | IEPL | X1.5
+  server: 36.141.40.13
+  port: 20013
+  type: ss
+  cipher: aes-256-gcm
+  password: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  udp: true
+- name: 🇺🇸 USA02 | IEPL | X1.5
+  server: 36.141.40.13
+  port: 20018
+  type: ss
+  cipher: aes-256-gcm
+  password: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  udp: true
+- name: '⛓️出口 :: 🇯🇵 JP | GCP'
+  type: vless
+  server: 34.104.200.173
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: Mwj5OJMwXO-rtKAVrRigy2dfeKV5Gi3k1QtLTqJV23c
+    short-id: 86aba989
+  network: tcp
+  client-fingerprint: chrome
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇭🇰 HK | GCP'
+  type: vless
+  server: 34.96.200.136
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: A5ZiSxdmuyz3Dr24Zfy3cQAnbsUPqZSbKNZvL536ZnA
+    short-id: d3a5539dd7
+  network: tcp
+  client-fingerprint: chrome
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇸🇬 SG | AWS | 1T | V6'
+  type: vless
+  server: 2406:da18:1639:cd00:84e2:ca3c:18bb:8b49
+  port: 5498
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: sjC-yuz96fVtCQNf8SmocQBGxjXIq9ZZVHmvEyMdOQ8
+    short-id: 4cc1516d
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇯🇵 JP | IPLC | AWS'
+  type: mieru
+  server: 120.253.251.131
+  port: 14599
+  username: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  password: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  transport: TCP
+  udp: true
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇭🇰 HK | GCE'
+  type: ss
+  server: 34.96.200.136
+  port: 18790
+  cipher: 2022-blake3-aes-256-gcm
+  password: N2FhODllZDQyZWI2MTg2MTNhMWUxYjM5ZTA1M2M0ODM=:NWYxNTE4MGYtNTI1OC00OWZmLWEwNTMtMWEyM2JhMmU=
+  udp: true
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇸🇬 SG | GCE'
+  type: vless
+  server: 34.142.226.19
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: B_PBeTMK1AwvZ1LL8iOGI9qiN0k8Z8SfzW8oC08DVAs
+    short-id: 3c94c44158f654f4
+  client-fingerprint: ios
+  network: tcp
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇹🇼 TW | GCP'
+  type: vless
+  server: 34.80.89.240
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: m2OlAnSnGHBcER2REgyqYl4fy0jGimV8U-d2AeBc2RE
+    short-id: c52903
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇺🇸 US | VMISS | OUT'
+  type: vless
+  server: 38.47.115.211
+  port: 17952
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: oi8NllRekfwJu22DZpiUOrPawOZ5rGFuaqq39JLeWHw
+    short-id: c7bbbd67ce147fcd
+  network: tcp
+  client-fingerprint: chrome
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇺🇸 US | VMISS'
+  type: vless
+  server: 38.47.115.211
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: zcUqdt5pI0kQjOcrNB2sgKYJQ8iHnVf2zTH88iMtvzE
+    short-id: 0128
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇺🇸 US | BWG | VMISS'
+  type: vless
+  server: 67.230.182.67
+  port: 17953
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: zcUqdt5pI0kQjOcrNB2sgKYJQ8iHnVf2zTH88iMtvzE
+    short-id: 0128
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇺🇸 US | BWG'
+  type: vless
+  server: 67.230.182.67
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: _1eN6CKc5RTMSSyVsXnkGETSpWT1ifLExAdEQmFKejM
+    short-id: d267b840005c
+  client-fingerprint: chrome
+  network: tcp
+  servername: gateway.icloud.com
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇯🇵 JP | AWS'
+  type: vless
+  server: 35.72.108.191
+  port: 443
+  uuid: 5f15180f-5258-49ff-a053-1a23ba2e2180
+  alterId: 0
+  cipher: auto
+  udp: true
+  flow: xtls-rprx-vision
+  encryption: none
+  tls: true
+  skip-cert-verify: false
+  reality-opts:
+    public-key: zWen601GXqDcD_9bXwTnHCN-Ww9-xG1AvOKZxUWQfCs
+    short-id: 2e5bb4051f124b33
+  client-fingerprint: chrome
+  network: tcp
+  servername: www.yahoo.co.jp
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇭🇰 HKA05 | IEPL'
+  server: 36.141.40.13
+  port: 1815
+  type: ss
+  cipher: aes-256-gcm
+  password: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  udp: true
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇭🇰 HKA09 | IEPL'
+  server: 36.141.40.13
+  port: 15268
+  type: vmess
+  uuid: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  udp: true
+  network: tcp
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇭🇰 HKA10 | IEPL'
+  server: 36.141.40.13
+  port: 13486
+  type: vmess
+  uuid: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: speedtest-bgp-01-10.entry-0.chinasnow.net
+  udp: true
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇺🇸 USA01 | IEPL | X1.5'
+  server: 36.141.40.13
+  port: 20013
+  type: ss
+  cipher: aes-256-gcm
+  password: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  udp: true
+  dialer-proxy: ⛓️ 入口节点
+- name: '⛓️出口 :: 🇺🇸 USA02 | IEPL | X1.5'
+  server: 36.141.40.13
+  port: 20018
+  type: ss
+  cipher: aes-256-gcm
+  password: 40bc80b4-342e-33b6-9c68-9ec92c2f53a5
+  udp: true
+  dialer-proxy: ⛓️ 入口节点
+dns:
+  enable: true
+  ipv6: true
+  respect-rules: true
+  enhanced-mode: fake-ip
+  nameserver:
+  - https://120.53.53.53/dns-query
+  - https://223.5.5.5/dns-query
+  proxy-server-nameserver:
+  - https://120.53.53.53/dns-query
+  - https://223.5.5.5/dns-query
+  nameserver-policy:
+    geosite:cn,private:
+    - https://120.53.53.53/dns-query
+    - https://223.5.5.5/dns-query
+    geosite:geolocation-!cn:
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.google/dns-query
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+  - '*'
+  - +.lan
+  - +.local
+  - time.*.com
+  - ntp.*.com
+  - +.market.xiaomi.com
+  - '*.weajp.com'
+  use-hosts: false
+  use-system-hosts: true
+  default-nameserver:
+  - tls://223.5.5.5
+  direct-nameserver: []
+  fallback: []
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+    - 240.0.0.0/4
+    - 0.0.0.0/32
+    domain:
+    - +.google.com
+    - +.facebook.com
+    - +.youtube.com
+geodata-mode: true
+geo-auto-update: true
+geodata-loader: standard
+geo-update-interval: 24
+geox-url:
+  geoip: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat
+  geosite: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat
+  mmdb: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb
+  asn: https://gh-proxy.com/https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb
+rule-providers:
+  category-ads-all:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs
+    path: ./ruleset/category-ads-all.mrs
+  talkatone-ads:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/TalkatoneAntiAds.list
+    path: ./ruleset/talkatone-ads.list
+  category-ai-!cn:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs
+    path: ./ruleset/category-ai-!cn.mrs
+  bilibili:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs
+    path: ./ruleset/bilibili.mrs
+  youtube:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs
+    path: ./ruleset/youtube.mrs
+  google:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs
+    path: ./ruleset/google.mrs
+  google-ip:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: ipcidr
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs
+    path: ./ruleset/google-ip.mrs
+  geolocation-cn:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-cn.mrs
+    path: ./ruleset/geolocation-cn.mrs
+  cn:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: ipcidr
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs
+    path: ./ruleset/cn.mrs
+  github:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs
+    path: ./ruleset/github.mrs
+  gitlab:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gitlab.mrs
+    path: ./ruleset/gitlab.mrs
+  microsoft:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs
+    path: ./ruleset/microsoft.mrs
+  apple:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
+    path: ./ruleset/apple.mrs
+  facebook:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/facebook.mrs
+    path: ./ruleset/facebook.mrs
+  instagram:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/instagram.mrs
+    path: ./ruleset/instagram.mrs
+  twitter:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs
+    path: ./ruleset/twitter.mrs
+  tiktok:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs
+    path: ./ruleset/tiktok.mrs
+  linkedin:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/linkedin.mrs
+    path: ./ruleset/linkedin.mrs
+  netflix:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs
+    path: ./ruleset/netflix.mrs
+  hulu:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hulu.mrs
+    path: ./ruleset/hulu.mrs
+  disney:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs
+    path: ./ruleset/disney.mrs
+  hbo:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hbo.mrs
+    path: ./ruleset/hbo.mrs
+  amazon:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/amazon.mrs
+    path: ./ruleset/amazon.mrs
+  bahamut:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bahamut.mrs
+    path: ./ruleset/bahamut.mrs
+  steam:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs
+    path: ./ruleset/steam.mrs
+  epicgames:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/epicgames.mrs
+    path: ./ruleset/epicgames.mrs
+  ea:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ea.mrs
+    path: ./ruleset/ea.mrs
+  ubisoft:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ubisoft.mrs
+    path: ./ruleset/ubisoft.mrs
+  blizzard:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/blizzard.mrs
+    path: ./ruleset/blizzard.mrs
+  coursera:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/coursera.mrs
+    path: ./ruleset/coursera.mrs
+  edx:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/edx.mrs
+    path: ./ruleset/edx.mrs
+  udemy:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/udemy.mrs
+    path: ./ruleset/udemy.mrs
+  khanacademy:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/khanacademy.mrs
+    path: ./ruleset/khanacademy.mrs
+  category-scholar-!cn:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-scholar-!cn.mrs
+    path: ./ruleset/category-scholar-!cn.mrs
+  paypal:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs
+    path: ./ruleset/paypal.mrs
+  visa:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/visa.mrs
+    path: ./ruleset/visa.mrs
+  mastercard:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/mastercard.mrs
+    path: ./ruleset/mastercard.mrs
+  stripe:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/stripe.mrs
+    path: ./ruleset/stripe.mrs
+  wise:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/wise.mrs
+    path: ./ruleset/wise.mrs
+  crypto:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Crypto.txt
+    path: ./ruleset/crypto.txt
+  aws:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/aws.mrs
+    path: ./ruleset/aws.mrs
+  azure:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/azure.mrs
+    path: ./ruleset/azure.mrs
+  digitalocean:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/digitalocean.mrs
+    path: ./ruleset/digitalocean.mrs
+  heroku:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/heroku.mrs
+    path: ./ruleset/heroku.mrs
+  dropbox:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/dropbox.mrs
+    path: ./ruleset/dropbox.mrs
+  geolocation-!cn:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs
+    path: ./ruleset/geolocation-!cn.mrs
+  private:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: ipcidr
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
+    path: ./ruleset/private.mrs
+  telegram:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: ipcidr
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs
+    path: ./ruleset/telegram.mrs
+  talkatone:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/talkatone.mrs
+    path: ./ruleset/talkatone.mrs
+  whatsapp:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/whatsapp.mrs
+    path: ./ruleset/whatsapp.mrs
+  category-bank-cn:
+    type: http
+    format: mrs
+    interval: 86400
+    behavior: domain
+    url: https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-bank-cn.mrs
+    path: ./ruleset/category-bank-cn.mrs
+proxy-groups:
+- type: select
+  name: 🚀 节点选择
+  proxies:
+  - DIRECT
+  - REJECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  include-all: true
+  filter: '^(?!(?:⛓️出口 :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口
+    :: 🇭🇰 HK \| GCE|⛓️出口 :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 ::
+    🇺🇸 US \| BWG \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口
+    :: 🇭🇰 HKA10 \| IEPL|⛓️出口 :: 🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$'
+- name: ⚡ 自动选择
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 300
+  lazy: false
+  include-all: true
+  filter: '^(?!(?:⛓️出口 :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口
+    :: 🇭🇰 HK \| GCE|⛓️出口 :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 ::
+    🇺🇸 US \| BWG \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口
+    :: 🇭🇰 HKA10 \| IEPL|⛓️出口 :: 🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$'
+- name: 🇭🇰 香港
+  type: select
+  include-all: true
+  filter: '^(?=.*(?:🇭🇰|香港|(?:^|[^A-Za-z0-9])[Hh][Kk](?:[0-9]+)?(?:$|[^A-Za-z0-9])|[Hh][Oo][Nn][Gg] [Kk][Oo][Nn][Gg]|(?:^|[^A-Za-z0-9])[Hh][Kk][Gg](?:[0-9]+)?(?:$|[^A-Za-z0-9])|(?:^|[^A-Za-z0-9])[Hh][Kk][Aa](?:[0-9]+)?(?:$|[^A-Za-z0-9])))(?=.*(?:^(?!(?:⛓️出口
+    :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口 :: 🇭🇰 HK \| GCE|⛓️出口
+    :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG \| VMISS|⛓️出口
+    :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口 :: 🇭🇰 HKA10 \| IEPL|⛓️出口 ::
+    🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$)).*$'
+- name: 🇹🇼 台湾
+  type: select
+  include-all: true
+  filter: '^(?=.*(?:🇹🇼|台湾|台灣|(?:^|[^A-Za-z0-9])[Tt][Ww](?:[0-9]+)?(?:$|[^A-Za-z0-9])|[Tt][Aa][Ii][Ww][Aa][Nn]|[Tt][Aa][Ii][Pp][Ee][Ii]))(?=.*(?:^(?!(?:⛓️出口
+    :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口 :: 🇭🇰 HK \| GCE|⛓️出口
+    :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG \| VMISS|⛓️出口
+    :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口 :: 🇭🇰 HKA10 \| IEPL|⛓️出口 ::
+    🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$)).*$'
+- name: 🇯🇵 日本
+  type: select
+  include-all: true
+  filter: '^(?=.*(?:🇯🇵|日本|东京|東京|大阪|埼玉|(?:^|[^A-Za-z0-9])[Jj][Pp](?:[0-9]+)?(?:$|[^A-Za-z0-9])|[Jj][Aa][Pp][Aa][Nn]|[Tt][Oo][Kk][Yy][Oo]|[Oo][Ss][Aa][Kk][Aa]|[Ss][Aa][Ii][Tt][Aa][Mm][Aa]))(?=.*(?:^(?!(?:⛓️出口
+    :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口 :: 🇭🇰 HK \| GCE|⛓️出口
+    :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG \| VMISS|⛓️出口
+    :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口 :: 🇭🇰 HKA10 \| IEPL|⛓️出口 ::
+    🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$)).*$'
+- name: 🇺🇸 美国
+  type: select
+  include-all: true
+  filter: '^(?=.*(?:🇺🇸|美国|美國|(?:^|[^A-Za-z0-9])[Uu][Ss](?:[0-9]+)?(?:$|[^A-Za-z0-9])|(?:^|[^A-Za-z0-9])[Uu][Ss][Aa](?:[0-9]+)?(?:$|[^A-Za-z0-9])|[Uu][Nn][Ii][Tt][Ee][Dd]
+    [Ss][Tt][Aa][Tt][Ee][Ss]|[Aa][Mm][Ee][Rr][Ii][Cc][Aa]|[Ll][Oo][Ss] [Aa][Nn][Gg][Ee][Ll][Ee][Ss]|[Ss][Aa][Nn] [Ff][Rr][Aa][Nn][Cc][Ii][Ss][Cc][Oo]|[Ss][Ii][Ll][Ii][Cc][Oo][Nn]
+    [Vv][Aa][Ll][Ll][Ee][Yy]))(?=.*(?:^(?!(?:⛓️出口 :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口
+    :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口 :: 🇭🇰 HK \| GCE|⛓️出口 :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口
+    :: 🇺🇸 US \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口
+    :: 🇭🇰 HKA09 \| IEPL|⛓️出口 :: 🇭🇰 HKA10 \| IEPL|⛓️出口 :: 🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$)).*$'
+  default: 🇺🇸 US | VMISS | OUT
+- name: 🇸🇬 新加坡
+  type: select
+  include-all: true
+  filter: '^(?=.*(?:🇸🇬|新加坡|(?:^|[^A-Za-z0-9])[Ss][Gg](?:[0-9]+)?(?:$|[^A-Za-z0-9])|[Ss][Ii][Nn][Gg][Aa][Pp][Oo][Rr][Ee]|(?:^|[^A-Za-z0-9])[Ss][Gg][Pp](?:[0-9]+)?(?:$|[^A-Za-z0-9])))(?=.*(?:^(?!(?:⛓️出口
+    :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口 :: 🇭🇰 HK \| GCE|⛓️出口
+    :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG \| VMISS|⛓️出口
+    :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口 :: 🇭🇰 HKA10 \| IEPL|⛓️出口 ::
+    🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$)).*$'
+- type: select
+  name: 🛑 广告拦截
+  proxies:
+  - REJECT
+  - DIRECT
+- type: select
+  name: 💬 AI 服务
+  proxies:
+  - 🇺🇸 美国
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇭🇰 香港
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇸🇬 新加坡
+- type: select
+  name: 📺 哔哩哔哩
+  proxies:
+  - DIRECT
+  - 🚀 节点选择
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 📹 油管视频
+  proxies:
+  - 🇭🇰 香港
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🔍 谷歌服务
+  proxies:
+  - 🇺🇸 美国
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇭🇰 香港
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇸🇬 新加坡
+- type: select
+  name: 🏠 私有网络
+  proxies:
+  - DIRECT
+  - 🚀 节点选择
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🔒 国内服务
+  proxies:
+  - DIRECT
+  - 🚀 节点选择
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 📲 电报消息
+  proxies:
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🐱 Github
+  proxies:
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: Ⓜ️ 微软服务
+  proxies:
+  - ⚡ 自动选择
+  - 🚀 节点选择
+  - DIRECT
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🍏 苹果服务
+  proxies:
+  - DIRECT
+  - 🚀 节点选择
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🌐 社交媒体
+  proxies:
+  - 🇺🇸 美国
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇭🇰 香港
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇸🇬 新加坡
+- type: select
+  name: 🎬 流媒体
+  proxies:
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🎮 游戏平台
+  proxies:
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 📚 教育资源
+  proxies:
+  - ⚡ 自动选择
+  - 🚀 节点选择
+  - DIRECT
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 💰 金融服务
+  proxies:
+  - 🇺🇸 美国
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇭🇰 香港
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇸🇬 新加坡
+- type: select
+  name: 💹 交易所
+  proxies:
+  - 🇯🇵 日本
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇭🇰 香港
+  - 🇹🇼 台湾
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: ☁️ 云服务
+  proxies:
+  - 🇺🇸 美国
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - ⛓️ 链式代理
+  - 🇭🇰 香港
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇸🇬 新加坡
+- type: select
+  name: 🌐 非中国
+  proxies:
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- type: select
+  name: 🐟 漏网之鱼
+  proxies:
+  - 🚀 节点选择
+  - DIRECT
+  - ⚡ 自动选择
+  - 🇭🇰 香港
+  - ⛓️ 链式代理
+  - 🇹🇼 台湾
+  - 🇯🇵 日本
+  - 🇺🇸 美国
+  - 🇸🇬 新加坡
+- name: ⛓️ 入口节点
+  type: select
+  include-all: true
+  filter: '^(?!(?:⛓️出口 :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口
+    :: 🇭🇰 HK \| GCE|⛓️出口 :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 ::
+    🇺🇸 US \| BWG \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口
+    :: 🇭🇰 HKA10 \| IEPL|⛓️出口 :: 🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$).*$'
+- name: ⛓️ 链式代理
+  type: select
+  include-all: true
+  filter: '^(?:⛓️出口 :: 🇯🇵 JP \| GCP|⛓️出口 :: 🇭🇰 HK \| GCP|⛓️出口 :: 🇸🇬 SG \| AWS \| 1T \| V6|⛓️出口 :: 🇯🇵 JP \| IPLC \| AWS|⛓️出口
+    :: 🇭🇰 HK \| GCE|⛓️出口 :: 🇸🇬 SG \| GCE|⛓️出口 :: 🇹🇼 TW \| GCP|⛓️出口 :: 🇺🇸 US \| VMISS \| OUT|⛓️出口 :: 🇺🇸 US \| VMISS|⛓️出口 ::
+    🇺🇸 US \| BWG \| VMISS|⛓️出口 :: 🇺🇸 US \| BWG|⛓️出口 :: 🇯🇵 JP \| AWS|⛓️出口 :: 🇭🇰 HKA05 \| IEPL|⛓️出口 :: 🇭🇰 HKA09 \| IEPL|⛓️出口
+    :: 🇭🇰 HKA10 \| IEPL|⛓️出口 :: 🇺🇸 USA01 \| IEPL \| X1\.5|⛓️出口 :: 🇺🇸 USA02 \| IEPL \| X1\.5)$'
+rules:
+- DOMAIN,wiki.l23.im,🇺🇸 US | VMISS
+- DOMAIN,wiki-share.l23.im,🇺🇸 US | VMISS
+- DOMAIN,vipoc.l23.im,🇺🇸 US | VMISS
+- DOMAIN,www.giffgaff.com,DIRECT
+- DOMAIN,www.notion.so,🇺🇸 US | VMISS
+- DOMAIN-KEYWORD,cloudflare,🇺🇸 US | VMISS
+- DOMAIN,webui.l23.im,🇺🇸 US | VMISS
+- DOMAIN,new-api.l23.im,🇺🇸 US | VMISS
+- DOMAIN-SUFFIX,nsstest.com,DIRECT
+- DOMAIN-SUFFIX,unicontrol.ai,DIRECT
+- DOMAIN-SUFFIX,tokenstars.ai,DIRECT
+- DOMAIN-SUFFIX,jinnll.xyz,🇺🇸 US | VMISS
+- DOMAIN-SUFFIX,geekai.co,DIRECT
+- DOMAIN,shop.023168.xyz,DIRECT
+- DOMAIN-SUFFIX,jinnll.cc,DIRECT
+- DOMAIN,msmp.abchina.com.cn,REJECT
+- DOMAIN-KEYWORD,jinnll,🇺🇸 US | VMISS
+- DOMAIN,yunbusiness.ccb.com,DIRECT
+- DOMAIN,wxh.wo.cn,DIRECT
+- DOMAIN,gate.lagou.com,DIRECT
+- DOMAIN,www.abchina.com.cn,DIRECT
+- DOMAIN,www.shanbay.com,DIRECT
+- DOMAIN,login-service.mobile-bank.psbc.com,DIRECT
+- DOMAIN,mobile-bank.psbc.com,DIRECT
+- DOMAIN,id6.me,DIRECT
+- DOMAIN,easy-login.10099.com.cn,DIRECT
+- DOMAIN-KEYWORD,-update.xoyocdn.com,DIRECT
+- DOMAIN,open.e.189.cn,DIRECT
+- RULE-SET,private,🏠 私有网络,no-resolve
+- DOMAIN-SUFFIX,jinnll.xyz,🚀 节点选择
+- DOMAIN-SUFFIX,weajp.com,DIRECT
+- DOMAIN-SUFFIX,starboss.biz,DIRECT
+- RULE-SET,amazon,DIRECT
+- RULE-SET,aws,DIRECT
+- DOMAIN-KEYWORD,starpay,DIRECT
+- DOMAIN-KEYWORD,atlassian,DIRECT
+- DOMAIN-SUFFIX,turingfraud.net,💹 交易所
+- DOMAIN,firebaseinstallations.googleapis.com,💹 交易所
+- RULE-SET,category-ads-all,🛑 广告拦截
+- RULE-SET,talkatone-ads,🛑 广告拦截
+- RULE-SET,category-bank-cn,DIRECT
+- RULE-SET,talkatone,🌐 社交媒体
+- RULE-SET,whatsapp,🌐 社交媒体
+- RULE-SET,telegram,📲 电报消息,no-resolve
+- RULE-SET,category-ai-!cn,💬 AI 服务
+- RULE-SET,bilibili,📺 哔哩哔哩
+- RULE-SET,youtube,📹 油管视频
+- RULE-SET,google,🔍 谷歌服务
+- RULE-SET,google-ip,🔍 谷歌服务,no-resolve
+- RULE-SET,github,🐱 Github
+- RULE-SET,gitlab,🐱 Github
+- RULE-SET,microsoft,Ⓜ️ 微软服务
+- RULE-SET,apple,🍏 苹果服务
+- RULE-SET,facebook,🌐 社交媒体
+- RULE-SET,instagram,🌐 社交媒体
+- RULE-SET,twitter,🌐 社交媒体
+- RULE-SET,tiktok,🌐 社交媒体
+- RULE-SET,linkedin,🌐 社交媒体
+- RULE-SET,netflix,🎬 流媒体
+- RULE-SET,hulu,🎬 流媒体
+- RULE-SET,disney,🎬 流媒体
+- RULE-SET,hbo,🎬 流媒体
+- RULE-SET,bahamut,🎬 流媒体
+- RULE-SET,steam,🎮 游戏平台
+- RULE-SET,epicgames,🎮 游戏平台
+- RULE-SET,ea,🎮 游戏平台
+- RULE-SET,ubisoft,🎮 游戏平台
+- RULE-SET,blizzard,🎮 游戏平台
+- RULE-SET,coursera,📚 教育资源
+- RULE-SET,edx,📚 教育资源
+- RULE-SET,udemy,📚 教育资源
+- RULE-SET,khanacademy,📚 教育资源
+- RULE-SET,category-scholar-!cn,📚 教育资源
+- RULE-SET,paypal,💰 金融服务
+- RULE-SET,visa,💰 金融服务
+- RULE-SET,mastercard,💰 金融服务
+- RULE-SET,stripe,💰 金融服务
+- RULE-SET,wise,💰 金融服务
+- RULE-SET,crypto,💹 交易所
+- RULE-SET,azure,☁️ 云服务
+- RULE-SET,digitalocean,☁️ 云服务
+- RULE-SET,heroku,☁️ 云服务
+- RULE-SET,dropbox,☁️ 云服务
+- RULE-SET,geolocation-!cn,🌐 非中国
+- RULE-SET,geolocation-cn,🔒 国内服务
+- RULE-SET,cn,🔒 国内服务
+- MATCH,🐟 漏网之鱼
+x-script-warnings:
+- 跳过链式出口「🇸🇬 SG | AWS」：协议 hysteria2 不适合作为链式出口
+external-controller: 127.0.0.1:9090
+ipv6: false
+mode: rule
+mixed-port: 7890
+socks-port: 7891
+port: 7892
+redir-port: 0
+tproxy-port: 0
+allow-lan: true
+unified-delay: true
+tcp-concurrent: true
+log-level: info
+find-process-mode: strict
+bind-address: '*'
+lan-allowed-ips:
+- 0.0.0.0/0
+- ::/0
+lan-disallowed-ips: []
+authentication: []
+skip-auth-prefixes:
+- 127.0.0.1/32
+- ::1/128
+tun:
+  enable: false
+  stack: mixed
+  auto-route: true
+  auto-redirect: false
+  auto-detect-interface: true
+  dns-hijack:
+  - any:53
+  route-exclude-address: []
+  mtu: 1500
+  device: Mihomo
+  strict-route: false
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  force-dns-mapping: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports:
+      - 80
+      - 443
+      override-destination: true
+    TLS:
+      ports:
+      - 443
+  skip-domain:
+  - +.push.apple.com
+  skip-dst-address:
+  - 91.105.192.0/23
+  - 91.108.4.0/22
+  - 91.108.8.0/21
+  - 91.108.16.0/21
+  - 91.108.56.0/22
+  - 95.161.64.0/20
+  - 149.154.160.0/20
+  - 185.76.151.0/24
+  - 2001:67c:4e8::/48
+  - 2001:b28:f23c::/47
+  - 2001:b28:f23f::/48
+  - 2a0a:f280:203::/48
+  force-domain: []
+  skip-src-address: []
+profile:
+  store-selected: true
+  store-fake-ip: true
+lgbm-auto-update: false
+lgbm-update-interval: 72
+lgbm-url: ''
+hosts: {}
+secret: '6666'
